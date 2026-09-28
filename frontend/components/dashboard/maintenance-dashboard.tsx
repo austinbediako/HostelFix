@@ -6,8 +6,12 @@ import { IssueList } from "@/components/issues/issue-list";
 import { useIssues } from "@/hooks/use-issues";
 import { LoadingState } from "@/components/shared/loading-state";
 import { ErrorState } from "@/components/shared/error-state";
+import { HallCrest } from "@/components/shared/hall-crest";
+import { useAuthContext } from "@/providers/auth-provider";
 
 export function MaintenanceDashboard() {
+  const { user } = useAuthContext();
+  const halls = user?.assignedHalls ?? [];
   const { data: issues, isLoading, error, refetch } = useIssues();
 
   const assignedCount = issues?.filter((i) => ["assigned", "in_progress"].includes(i.status)).length ?? 0;
@@ -30,7 +34,16 @@ export function MaintenanceDashboard() {
       <PageHeader
         title="Maintenance Dashboard"
         description="View your work orders and update progress."
-      />
+      >
+        {halls.length === 1 && <HallCrest hall={halls[0]} />}
+        {halls.length > 1 && (
+          <div className="flex -space-x-2">
+            {halls.slice(0, 4).map((hall) => (
+              <HallCrest key={hall.id} hall={hall} showName={false} />
+            ))}
+          </div>
+        )}
+      </PageHeader>
       <div className="mb-8 grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader>

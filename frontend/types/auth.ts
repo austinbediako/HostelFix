@@ -15,6 +15,7 @@ export interface AllocatedLocation {
   room?: string;
   commonArea?: string;
   type: LocationType;
+  hall?: HallAssignment;
 }
 
 export interface CurrentUser {

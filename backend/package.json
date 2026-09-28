@@ -13,6 +13,7 @@
     "start": "node dist/server.js",
     "seed": "tsx scripts/seed-halls.ts && tsx scripts/seed-admin.ts",
     "seed:dev": "tsx scripts/seed-halls.ts && tsx scripts/seed-admin.ts && tsx scripts/seed-dev.ts",
+    "seed:test": "tsx scripts/seed-test-users.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:unit": "vitest run tests/unit",

@@ -188,7 +188,11 @@ export async function resetPassword(token: string, password: string) {
 export async function getMe(userId: string) {
   const user = await User.findById(userId)
     .populate('assignedHallIds', 'name code')
-    .populate('allocatedLocationId', 'block floor room commonArea type');
+    .populate({
+      path: 'allocatedLocationId',
+      select: 'block floor room commonArea type hallId',
+      populate: { path: 'hallId', select: 'name code' },
+    });
   if (!user) {
     throw new AppError(404, ErrorCodes.NOT_FOUND, 'User not found');
   }
@@ -218,6 +222,15 @@ function sanitizeUser(
           room: doc.allocatedLocationId.room,
           commonArea: doc.allocatedLocationId.commonArea,
           type: doc.allocatedLocationId.type,
+          hall:
+            doc.allocatedLocationId.hallId &&
+            typeof doc.allocatedLocationId.hallId === 'object'
+              ? {
+                  id: (doc.allocatedLocationId.hallId as { _id?: mongoose.Types.ObjectId })._id?.toString(),
+                  name: (doc.allocatedLocationId.hallId as { name?: string }).name,
+                  code: (doc.allocatedLocationId.hallId as { code?: string }).code,
+                }
+              : undefined,
         }
       : null,
   };

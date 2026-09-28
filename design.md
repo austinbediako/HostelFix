@@ -603,6 +603,10 @@ Files live in `frontend/public/illustrations/`. Render only through the
 | `audit-trail.svg` | 4:3 | Ledger page with sealed check mark | Audit Logs empty state | "records", "audit log" |
 | `users-directory.svg` | 4:3 | Roster card with two member rows and an add-person seal | Admin Users page overview + empty state | "team", "directory" |
 
+### Hall crests
+
+Each hall of residence can display a crest on its dashboards via `components/shared/hall-crest.tsx` + `lib/hall-logos.ts`, keyed by hall code. Commonwealth (CMH) and Mensah Sarbah (MSH) use the halls' official crests (PNG); the remaining halls use project-owned flat shield badges (`frontend/public/halls/*.svg`) in the blue/gold palette with a motif matching each hall's identity (cocoa pod for Akuafo, waves for Volta, diamond for Diamond Jubilee, etc.). If a crest asset is missing, `HallCrest` falls back to a code monogram badge.
+
 All assets are 0.9–2.7 KB hand-written SVG, with no raster data and no scripts.
 
 ### Components

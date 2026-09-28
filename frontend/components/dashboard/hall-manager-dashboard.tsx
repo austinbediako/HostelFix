@@ -6,8 +6,12 @@ import { IssueList } from "@/components/issues/issue-list";
 import { useIssues } from "@/hooks/use-issues";
 import { LoadingState } from "@/components/shared/loading-state";
 import { ErrorState } from "@/components/shared/error-state";
+import { HallCrest } from "@/components/shared/hall-crest";
+import { useAuthContext } from "@/providers/auth-provider";
 
 export function HallManagerDashboard() {
+  const { user } = useAuthContext();
+  const halls = user?.assignedHalls ?? [];
   const { data: issues, isLoading, error, refetch } = useIssues();
 
   const pendingCount = issues?.filter((i) => ["submitted", "reopened"].includes(i.status)).length ?? 0;
@@ -19,7 +23,16 @@ export function HallManagerDashboard() {
       <PageHeader
         title="Hall Manager Dashboard"
         description="Manage and assign maintenance issues for your halls."
-      />
+      >
+        {halls.length === 1 && <HallCrest hall={halls[0]} />}
+        {halls.length > 1 && (
+          <div className="flex -space-x-2">
+            {halls.slice(0, 4).map((hall) => (
+              <HallCrest key={hall.id} hall={hall} showName={false} />
+            ))}
+          </div>
+        )}
+      </PageHeader>
       <div className="mb-8 grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader>

@@ -7,8 +7,12 @@ import { useIssues } from "@/hooks/use-issues";
 import { LoadingState } from "@/components/shared/loading-state";
 import { ErrorState } from "@/components/shared/error-state";
 import { IssueList } from "@/components/issues/issue-list";
+import { HallCrest } from "@/components/shared/hall-crest";
+import { useAuthContext } from "@/providers/auth-provider";
 
 export function StudentDashboard() {
+  const { user } = useAuthContext();
+  const hall = user?.allocatedLocation?.hall;
   const { data: issues, isLoading, error, refetch } = useIssues({ status: undefined });
 
   const totalCount = issues?.length ?? 0;
@@ -21,7 +25,9 @@ export function StudentDashboard() {
       <PageHeader
         title="Student Dashboard"
         description="Track your maintenance requests and report new issues."
-      />
+      >
+        {hall && <HallCrest hall={hall} />}
+      </PageHeader>
 
       <FeatureCard
         title="Something in your hall needs fixing?"
