@@ -1,0 +1,168 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Custom theme tokens */
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
+  --color-primary-tint: var(--primary-tint);
+  --color-gold: var(--accent);
+  --color-gold-light: var(--gold-light);
+  --color-gold-tint: var(--gold-tint);
+  --color-assigned: var(--assigned);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* UG institutional style: square corners everywhere (design.md §7).
+     Only `rounded-full` (avatars, radio controls, dots) keeps its shape. */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
+}
+
+:root {
+  /* University of Ghana institutional palette — see design.md */
+  --background: #f7f7f7;
+  --foreground: #222222;
+
+  --card: #ffffff;
+  --card-foreground: #222222;
+
+  --popover: #ffffff;
+  --popover-foreground: #222222;
+
+  --primary: #2f4a75;
+  --primary-foreground: #ffffff;
+  --primary-dark: #243a5d;
+  --primary-light: #49658f;
+  --primary-tint: #e9eef5;
+
+  --secondary: #f7f7f7;
+  --secondary-foreground: #222222;
+
+  --muted: #f0f0f0;
+  --muted-foreground: #666666;
+
+  --accent: #b79a64;
+  --accent-foreground: #222222;
+  --gold-light: #d0be95;
+  --gold-tint: #f4f0e8;
+
+  --destructive: #b42318;
+  --destructive-foreground: #ffffff;
+
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #2f4a75;
+
+  --radius: 0px;
+
+  /* Semantic */
+  --success: #1e7b34;
+  --success-bg: #e7f4eb;
+  --warning: #9a6b00;
+  --warning-bg: #fbf1d7;
+  --danger: #b42318;
+  --danger-bg: #fbe9e7;
+  --info: #2563eb;
+  --info-bg: #e4eef7;
+  --assigned: #7a5c00;
+
+  /* Text */
+  --text-primary: #222222;
+  --text-secondary: #666666;
+  --text-muted: #888888;
+
+  /* Sidebar */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #222222;
+  --sidebar-primary: #2f4a75;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e9eef5;
+  --sidebar-accent-foreground: #2f4a75;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #2f4a75;
+
+  /* Charts */
+  --chart-1: #2f4a75;
+  --chart-2: #b79a64;
+  --chart-3: #1e7b34;
+  --chart-4: #2563eb;
+  --chart-5: #666666;
+
+  /* Layout */
+  --sidebar-width: 256px;
+  --top-bar-height: 64px;
+  --content-max-width: 1200px;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply h-full font-sans antialiased;
+  }
+  body {
+    @apply min-h-full bg-background text-foreground;
+  }
+}
+
+/* Utility helpers */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

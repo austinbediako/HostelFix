@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" fill="none">
+  <rect width="480" height="360" fill="#E9EEF5"/>
+  <circle cx="372" cy="84" r="30" fill="#D0BE95"/>
+  <path d="M0 282q120-26 240-8t240-10v96H0z" fill="#DDE5EF"/>
+  <rect x="96" y="186" width="288" height="100" fill="#FFFFFF"/>
+  <path d="M84 190l32-26h248l32 26z" fill="#243A5D"/>
+  <path d="M84 190h312" stroke="#B79A64" stroke-width="3"/>
+  <rect x="204" y="112" width="72" height="174" fill="#FFFFFF"/>
+  <path d="M192 118l20-22h56l20 22z" fill="#243A5D"/>
+  <path d="M204 76l12-16h48l12 16z" fill="#2F4A75"/>
+  <rect x="214" y="76" width="52" height="20" fill="#FFFFFF"/>
+  <path d="M232 60l8-12 8 12z" fill="#B79A64"/>
+  <circle cx="240" cy="142" r="14" fill="#F4F0E8" stroke="#B79A64" stroke-width="3"/>
+  <path d="M240 134v8l6 4" stroke="#243A5D" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M222 286v-44q18-20 36 0v44z" fill="#2F4A75"/>
+  <path d="M120 250v-26q10-12 20 0v26zM156 250v-26q10-12 20 0v26zM304 250v-26q10-12 20 0v26zM340 250v-26q10-12 20 0v26z" fill="#49658F"/>
+  <path d="M222 190v-12M258 190v-12" stroke="#DDE5EF" stroke-width="3"/>
+  <rect x="96" y="274" width="288" height="12" fill="#F7F7F7"/>
+  <path d="M60 290v-86" stroke="#6B4226" stroke-width="6" stroke-linecap="round"/>
+  <path d="M60 206q-30-2-44 16q20-10 44-10M60 206q30-6 46 10q-22-6-46-4M60 206q-8-24-30-32q14 14 24 32M60 206q12-22 34-26q-18 10-28 28" stroke="#243A5D" stroke-width="7" stroke-linecap="round"/>
+  <path d="M424 292v-72" stroke="#6B4226" stroke-width="5" stroke-linecap="round"/>
+  <path d="M424 222q-26-2-38 14q18-8 38-8M424 222q26-6 40 8q-20-4-40-2M424 222q-6-20-26-28q12 12 22 28M424 222q10-18 30-22q-16 8-24 24" stroke="#2F4A75" stroke-width="6" stroke-linecap="round"/>
+  <path d="M0 312q240-18 480 0v48H0z" fill="#CFD6E0"/>
+</svg>

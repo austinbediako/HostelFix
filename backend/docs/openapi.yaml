@@ -1,0 +1,637 @@
+openapi: 3.1.0
+info:
+  title: HostelFix API
+  description: University of Ghana Legon maintenance reporting and tracking backend
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Local development server
+paths:
+  /health:
+    get:
+      summary: Health check
+      tags:
+        - Health
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  service:
+                    type: string
+  /auth/login:
+    post:
+      summary: Authenticate and receive cookies
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /auth/logout:
+    post:
+      summary: End session
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Logged out
+  /auth/refresh:
+    post:
+      summary: Rotate access token using refresh cookie
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Token refreshed
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /auth/forgot-password:
+    post:
+      summary: Request password reset
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Reset initiated
+  /auth/reset-password:
+    post:
+      summary: Complete password reset
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - password
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                  minLength: 8
+      responses:
+        '200':
+          description: Password reset successful
+  /auth/me:
+    get:
+      summary: Get current user and permissions
+      tags:
+        - Auth
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Current user
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /uploads/signature:
+    post:
+      summary: Get a Cloudinary signed upload signature
+      tags:
+        - Uploads
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Signature generated
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /halls:
+    get:
+      summary: List approved University-managed halls
+      tags:
+        - Halls
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: List of halls
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /halls/{hallId}:
+    get:
+      summary: Get a hall
+      tags:
+        - Halls
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: hallId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Hall details
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Update controlled hall metadata
+      tags:
+        - Halls
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: hallId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                active:
+                  type: boolean
+      responses:
+        '200':
+          description: Hall updated
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /halls/{hallId}/locations:
+    get:
+      summary: List rooms and common areas in a hall
+      tags:
+        - Halls
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: hallId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of locations
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /halls/{hallId}/dashboard:
+    get:
+      summary: Hall-level issue metrics
+      tags:
+        - Halls
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: hallId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Dashboard metrics
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /issues:
+    post:
+      summary: Create a maintenance issue
+      tags:
+        - Issues
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIssue'
+      responses:
+        '201':
+          description: Issue created
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      summary: List visible issues
+      tags:
+        - Issues
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: List of issues
+  /issues/{issueId}:
+    get:
+      summary: Get an issue
+      tags:
+        - Issues
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Issue details
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /issues/{issueId}/comments:
+    post:
+      summary: Add a comment
+      tags:
+        - Issues
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - message
+              properties:
+                message:
+                  type: string
+      responses:
+        '201':
+          description: Comment added
+  /issues/{issueId}/acknowledge:
+    patch:
+      summary: Acknowledge, reject, or request clarification
+      description: |
+        Hall management triages a reported issue. The `acknowledge` action moves
+        the issue to `under_review`. Rejecting closes it as invalid. A
+        clarification request asks the reporter for more information while keeping
+        the issue in `submitted`.
+      tags:
+        - Issues
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - action
+              properties:
+                action:
+                  type: string
+                  enum:
+                    - acknowledge
+                    - reject
+                    - clarify
+                message:
+                  type: string
+      responses:
+        '200':
+          description: Acknowledgement updated
+  /issues/{issueId}/priority:
+    patch:
+      summary: Change operational priority
+      tags:
+        - Issues
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - priority
+              properties:
+                priority:
+                  type: string
+                  enum:
+                    - emergency
+                    - high
+                    - normal
+                    - low
+      responses:
+        '200':
+          description: Priority updated
+  /issues/{issueId}/assignments:
+    post:
+      summary: Assign maintenance personnel
+      description: |
+        Records the maintenance personnel responsible for an issue. When the
+        issue is submitted, under review, or reopened, assignment also moves the
+        issue to `assigned`. Resolution is not blocked on assignment: authorized
+        staff can resolve submitted, under_review, assigned, in_progress, or
+        reopened issues directly.
+      tags:
+        - Issues
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - personnelIds
+              properties:
+                personnelIds:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Personnel assigned
+  /issues/{issueId}/status:
+    patch:
+      summary: Advance issue status
+      tags:
+        - Issues
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - submitted
+                    - under_review
+                    - assigned
+                    - in_progress
+                    - resolved
+                    - reopened
+                    - rejected
+                    - closed
+                message:
+                  type: string
+                  description: Optional context accepted by validation; not currently persisted by the status service.
+      responses:
+        '200':
+          description: Status updated
+  /issues/{issueId}/reopen:
+    post:
+      summary: Reopen a resolved issue
+      tags:
+        - Issues
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Issue reopened
+  /analytics/overview:
+    get:
+      summary: Cross-hall analytics
+      tags:
+        - Analytics
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Analytics overview
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /analytics/halls/{hallId}:
+    get:
+      summary: Hall-level analytics
+      tags:
+        - Analytics
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: hallId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Hall analytics
+  /audit-logs:
+    get:
+      summary: Query audit logs
+      tags:
+        - Audit
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: resourceType
+          in: query
+          schema:
+            type: string
+        - name: resourceId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Audit log entries
+  /users:
+    get:
+      summary: List users
+      tags:
+        - Users
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: List of users
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /users/{userId}/roles:
+    patch:
+      summary: Change a user's role
+      tags:
+        - Users
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - role
+              properties:
+                role:
+                  type: string
+                  enum:
+                    - student
+                    - hall_manager
+                    - maintenance
+                    - university_admin
+                    - system_admin
+      responses:
+        '200':
+          description: Role updated
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  schemas:
+    CreateIssue:
+      type: object
+      required:
+        - hallId
+        - room
+        - category
+        - description
+        - reportedPriority
+      properties:
+        hallId:
+          type: string
+        room:
+          type: string
+          maxLength: 20
+        category:
+          type: string
+          enum:
+            - plumbing
+            - electrical
+            - sanitation
+            - internet
+            - structural
+            - other
+        description:
+          type: string
+        reportedPriority:
+          type: string
+          enum:
+            - emergency
+            - high
+            - normal
+            - low
+        imageUrls:
+          type: array
+          items:
+            type: string
+            format: uri
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            requestId:
+              type: string
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: access_token

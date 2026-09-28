@@ -1,0 +1,2537 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>HostelFix: Technical Project and Oral-Defense Document</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">HostelFix: Technical Project and Oral-Defense
+Document</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#hostelfix" id="toc-hostelfix">HostelFix</a>
+<ul>
+<li><a
+href="#design-and-implementation-of-a-role-based-maintenance-reporting-and-tracking-system-for-university-of-ghana-halls"
+id="toc-design-and-implementation-of-a-role-based-maintenance-reporting-and-tracking-system-for-university-of-ghana-halls">Design
+and Implementation of a Role-Based Maintenance Reporting and Tracking
+System for University of Ghana Halls</a></li>
+<li><a href="#abstract" id="toc-abstract">Abstract</a></li>
+<li><a href="#table-of-contents" id="toc-table-of-contents">Table of
+Contents</a></li>
+</ul></li>
+<li><a href="#introduction" id="toc-introduction">1.
+Introduction</a></li>
+<li><a href="#problem-definition-and-motivation"
+id="toc-problem-definition-and-motivation">2. Problem Definition and
+Motivation</a>
+<ul>
+<li><a href="#problem-statement" id="toc-problem-statement">2.1 Problem
+statement</a></li>
+<li><a href="#evidence-and-validation-status"
+id="toc-evidence-and-validation-status">2.2 Evidence and validation
+status</a></li>
+<li><a href="#existing-alternatives-and-their-gaps"
+id="toc-existing-alternatives-and-their-gaps">2.3 Existing alternatives
+and their gaps</a></li>
+<li><a href="#why-this-is-a-computing-problem"
+id="toc-why-this-is-a-computing-problem">2.4 Why this is a computing
+problem</a></li>
+<li><a href="#novelty-statement" id="toc-novelty-statement">2.5 Novelty
+statement</a></li>
+</ul></li>
+<li><a href="#stakeholders-and-scope" id="toc-stakeholders-and-scope">3.
+Stakeholders and Scope</a>
+<ul>
+<li><a href="#stakeholders" id="toc-stakeholders">3.1 Stakeholders</a>
+<ul>
+<li><a href="#student-resident" id="toc-student-resident">Student
+resident</a></li>
+<li><a href="#hall-manager-or-caretaker"
+id="toc-hall-manager-or-caretaker">Hall manager or caretaker</a></li>
+<li><a href="#maintenance-personnel"
+id="toc-maintenance-personnel">Maintenance personnel</a></li>
+<li><a href="#university-administrator"
+id="toc-university-administrator">University administrator</a></li>
+<li><a href="#system-administrator" id="toc-system-administrator">System
+administrator</a></li>
+<li><a href="#indirect-stakeholders"
+id="toc-indirect-stakeholders">Indirect stakeholders</a></li>
+</ul></li>
+<li><a href="#in-scope" id="toc-in-scope">3.2 In scope</a></li>
+<li><a href="#out-of-scope-or-incomplete"
+id="toc-out-of-scope-or-incomplete">3.3 Out of scope or
+incomplete</a></li>
+<li><a href="#residence-scope-discrepancy-discovered-during-audit"
+id="toc-residence-scope-discrepancy-discovered-during-audit">3.4
+Residence scope discrepancy discovered during audit</a></li>
+</ul></li>
+<li><a href="#requirements-engineering"
+id="toc-requirements-engineering">4. Requirements Engineering</a>
+<ul>
+<li><a href="#elicitation-approach" id="toc-elicitation-approach">4.1
+Elicitation approach</a></li>
+<li><a href="#functional-requirements"
+id="toc-functional-requirements">4.2 Functional requirements</a></li>
+<li><a href="#non-functional-requirements"
+id="toc-non-functional-requirements">4.3 Non-functional
+requirements</a></li>
+<li><a href="#requirements-traceability-examples"
+id="toc-requirements-traceability-examples">4.4 Requirements
+traceability examples</a></li>
+<li><a href="#handling-conflicting-requirements"
+id="toc-handling-conflicting-requirements">4.5 Handling conflicting
+requirements</a></li>
+</ul></li>
+<li><a href="#operational-workflow" id="toc-operational-workflow">5.
+Operational Workflow</a>
+<ul>
+<li><a href="#main-lifecycle" id="toc-main-lifecycle">5.1 Main
+lifecycle</a></li>
+<li><a href="#detailed-flow" id="toc-detailed-flow">5.2 Detailed
+flow</a></li>
+<li><a href="#direct-resolution" id="toc-direct-resolution">5.3 Direct
+resolution</a></li>
+<li><a href="#maintenance-role-justification"
+id="toc-maintenance-role-justification">5.4 Maintenance-role
+justification</a></li>
+<li><a href="#emergency-behavior" id="toc-emergency-behavior">5.5
+Emergency behavior</a></li>
+</ul></li>
+<li><a href="#system-architecture" id="toc-system-architecture">6.
+System Architecture</a>
+<ul>
+<li><a href="#architectural-style" id="toc-architectural-style">6.1
+Architectural style</a></li>
+<li><a href="#why-a-modular-monolith"
+id="toc-why-a-modular-monolith">6.2 Why a modular monolith</a></li>
+<li><a href="#alternatives-rejected" id="toc-alternatives-rejected">6.3
+Alternatives rejected</a>
+<ul>
+<li><a href="#microservices"
+id="toc-microservices">Microservices</a></li>
+<li><a href="#next.js-only-backend"
+id="toc-next.js-only-backend">Next.js-only backend</a></li>
+<li><a href="#serverless-functions"
+id="toc-serverless-functions">Serverless functions</a></li>
+</ul></li>
+<li><a href="#internal-module-pattern"
+id="toc-internal-module-pattern">6.4 Internal module pattern</a></li>
+<li><a href="#communication-protocols"
+id="toc-communication-protocols">6.5 Communication protocols</a></li>
+<li><a href="#single-points-of-failure"
+id="toc-single-points-of-failure">6.6 Single points of failure</a></li>
+</ul></li>
+<li><a href="#technology-and-design-decisions"
+id="toc-technology-and-design-decisions">7. Technology and Design
+Decisions</a>
+<ul>
+<li><a href="#frontend" id="toc-frontend">7.1 Frontend</a></li>
+<li><a href="#backend" id="toc-backend">7.2 Backend</a></li>
+<li><a href="#why-mongodb" id="toc-why-mongodb">7.3 Why MongoDB</a></li>
+<li><a href="#why-external-image-storage"
+id="toc-why-external-image-storage">7.4 Why external image
+storage</a></li>
+</ul></li>
+<li><a href="#data-design" id="toc-data-design">8. Data Design</a>
+<ul>
+<li><a href="#main-collections" id="toc-main-collections">8.1 Main
+collections</a>
+<ul>
+<li><a href="#users" id="toc-users">Users</a></li>
+<li><a href="#halls-and-locations" id="toc-halls-and-locations">Halls
+and locations</a></li>
+<li><a href="#issues" id="toc-issues">Issues</a></li>
+<li><a href="#issue-events" id="toc-issue-events">Issue events</a></li>
+<li><a href="#audit-logs" id="toc-audit-logs">Audit logs</a></li>
+<li><a href="#refresh-and-reset-tokens"
+id="toc-refresh-and-reset-tokens">Refresh and reset tokens</a></li>
+<li><a href="#reference-counters" id="toc-reference-counters">Reference
+counters</a></li>
+</ul></li>
+<li><a href="#relationship-overview" id="toc-relationship-overview">8.2
+Relationship overview</a></li>
+<li><a href="#indexes" id="toc-indexes">8.3 Indexes</a></li>
+<li><a href="#concurrent-writes" id="toc-concurrent-writes">8.4
+Concurrent writes</a></li>
+<li><a href="#normalization-and-denormalization"
+id="toc-normalization-and-denormalization">8.5 Normalization and
+denormalization</a></li>
+<li><a href="#growth-to-100-times-the-data"
+id="toc-growth-to-100-times-the-data">8.6 Growth to 100 times the
+data</a></li>
+</ul></li>
+<li><a href="#api-and-module-design" id="toc-api-and-module-design">9.
+API and Module Design</a>
+<ul>
+<li><a href="#api-base-and-documentation"
+id="toc-api-base-and-documentation">9.1 API base and
+documentation</a></li>
+<li><a href="#important-endpoint-groups"
+id="toc-important-endpoint-groups">9.2 Important endpoint groups</a>
+<ul>
+<li><a href="#authentication"
+id="toc-authentication">Authentication</a></li>
+<li><a href="#issues-1" id="toc-issues-1">Issues</a></li>
+<li><a href="#residence-directory"
+id="toc-residence-directory">Residence directory</a></li>
+<li><a href="#administration"
+id="toc-administration">Administration</a></li>
+</ul></li>
+<li><a href="#request-validation" id="toc-request-validation">9.3
+Request validation</a></li>
+<li><a href="#error-format" id="toc-error-format">9.4 Error
+format</a></li>
+<li><a href="#current-contract-limitation"
+id="toc-current-contract-limitation">9.5 Current contract
+limitation</a></li>
+</ul></li>
+<li><a href="#frontend-design" id="toc-frontend-design">10. Frontend
+Design</a>
+<ul>
+<li><a href="#shared-role-based-route"
+id="toc-shared-role-based-route">10.1 Shared role-based route</a></li>
+<li><a href="#role-views" id="toc-role-views">10.2 Role views</a>
+<ul>
+<li><a href="#student" id="toc-student">Student</a></li>
+<li><a href="#hall-manager" id="toc-hall-manager">Hall manager</a></li>
+<li><a href="#maintenance" id="toc-maintenance">Maintenance</a></li>
+<li><a href="#administrator"
+id="toc-administrator">Administrator</a></li>
+</ul></li>
+<li><a href="#session-guard" id="toc-session-guard">10.3 Session
+guard</a></li>
+<li><a href="#state-management" id="toc-state-management">10.4 State
+management</a></li>
+</ul></li>
+<li><a href="#algorithms-and-complexity"
+id="toc-algorithms-and-complexity">11. Algorithms and Complexity</a>
+<ul>
+<li><a href="#state-transition-validation"
+id="toc-state-transition-validation">11.1 State-transition
+validation</a></li>
+<li><a href="#unique-reference-allocation"
+id="toc-unique-reference-allocation">11.2 Unique reference
+allocation</a></li>
+<li><a href="#role-scoped-issue-retrieval"
+id="toc-role-scoped-issue-retrieval">11.3 Role-scoped issue
+retrieval</a></li>
+<li><a href="#overdue-calculation" id="toc-overdue-calculation">11.4
+Overdue calculation</a></li>
+<li><a href="#auto-close-job" id="toc-auto-close-job">11.5 Auto-close
+job</a></li>
+<li><a href="#analytics" id="toc-analytics">11.6 Analytics</a></li>
+<li><a href="#performance-evidence" id="toc-performance-evidence">11.7
+Performance evidence</a></li>
+</ul></li>
+<li><a href="#security-and-governance"
+id="toc-security-and-governance">12. Security and Governance</a>
+<ul>
+<li><a href="#authentication-1" id="toc-authentication-1">12.1
+Authentication</a></li>
+<li><a href="#authorization" id="toc-authorization">12.2
+Authorization</a></li>
+<li><a href="#token-theft-response" id="toc-token-theft-response">12.3
+Token theft response</a></li>
+<li><a href="#threat-model-leading-attack-vectors"
+id="toc-threat-model-leading-attack-vectors">12.4 Threat model: leading
+attack vectors</a>
+<ul>
+<li><a href="#broken-access-control"
+id="toc-broken-access-control">Broken access control</a></li>
+<li><a href="#credential-attacks" id="toc-credential-attacks">Credential
+attacks</a></li>
+<li><a href="#injection-and-malicious-input"
+id="toc-injection-and-malicious-input">Injection and malicious
+input</a></li>
+<li><a href="#malicious-or-privacy-invasive-images"
+id="toc-malicious-or-privacy-invasive-images">Malicious or
+privacy-invasive images</a></li>
+</ul></li>
+<li><a href="#owasp-alignment" id="toc-owasp-alignment">12.5 OWASP
+alignment</a></li>
+<li><a href="#data-at-rest-and-in-transit"
+id="toc-data-at-rest-and-in-transit">12.6 Data at rest and in
+transit</a></li>
+<li><a href="#database-credential-leakage"
+id="toc-database-credential-leakage">12.7 Database credential
+leakage</a></li>
+<li><a href="#governance" id="toc-governance">12.8 Governance</a></li>
+</ul></li>
+<li><a href="#software-engineering-process"
+id="toc-software-engineering-process">13. Software Engineering
+Process</a>
+<ul>
+<li><a href="#development-approach" id="toc-development-approach">13.1
+Development approach</a></li>
+<li><a href="#code-organization" id="toc-code-organization">13.2 Code
+organization</a></li>
+<li><a href="#version-control" id="toc-version-control">13.3 Version
+control</a></li>
+<li><a href="#static-analysis-and-quality-gates"
+id="toc-static-analysis-and-quality-gates">13.4 Static analysis and
+quality gates</a></li>
+</ul></li>
+<li><a href="#testing-and-evaluation"
+id="toc-testing-and-evaluation">14. Testing and Evaluation</a>
+<ul>
+<li><a href="#testing-strategy" id="toc-testing-strategy">14.1 Testing
+strategy</a>
+<ul>
+<li><a href="#unit-testing" id="toc-unit-testing">Unit testing</a></li>
+<li><a href="#integration-testing"
+id="toc-integration-testing">Integration testing</a></li>
+<li><a href="#permission-testing" id="toc-permission-testing">Permission
+testing</a></li>
+<li><a href="#frontend-testing" id="toc-frontend-testing">Frontend
+testing</a></li>
+</ul></li>
+<li><a href="#current-verified-results"
+id="toc-current-verified-results">14.2 Current verified results</a></li>
+<li><a href="#example-failure-and-correction"
+id="toc-example-failure-and-correction">14.3 Example failure and
+correction</a></li>
+<li><a href="#correctness-versus-it-runs"
+id="toc-correctness-versus-it-runs">14.4 Correctness versus “it
+runs”</a></li>
+<li><a href="#missing-evaluation" id="toc-missing-evaluation">14.5
+Missing evaluation</a></li>
+</ul></li>
+<li><a href="#deployment-and-operations"
+id="toc-deployment-and-operations">15. Deployment and Operations</a>
+<ul>
+<li><a href="#local-runtime" id="toc-local-runtime">15.1 Local
+runtime</a></li>
+<li><a href="#production-topology" id="toc-production-topology">15.2
+Production topology</a></li>
+<li><a href="#scaling-to-ten-times-the-load"
+id="toc-scaling-to-ten-times-the-load">15.3 Scaling to ten times the
+load</a></li>
+</ul></li>
+<li><a href="#limitations-and-future-work"
+id="toc-limitations-and-future-work">16. Limitations and Future Work</a>
+<ul>
+<li><a href="#biggest-current-limitation"
+id="toc-biggest-current-limitation">16.1 Biggest current
+limitation</a></li>
+<li><a href="#important-technical-limitations"
+id="toc-important-technical-limitations">16.2 Important technical
+limitations</a></li>
+<li><a href="#prioritized-roadmap" id="toc-prioritized-roadmap">16.3
+Prioritized roadmap</a>
+<ul>
+<li><a href="#immediate-correctness"
+id="toc-immediate-correctness">Immediate correctness</a></li>
+<li><a href="#operational-completeness"
+id="toc-operational-completeness">Operational completeness</a></li>
+<li><a href="#production-readiness"
+id="toc-production-readiness">Production readiness</a></li>
+<li><a href="#research-and-evaluation"
+id="toc-research-and-evaluation">Research and evaluation</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#critical-reflection-and-intellectual-contribution"
+id="toc-critical-reflection-and-intellectual-contribution">17. Critical
+Reflection and Intellectual Contribution</a>
+<ul>
+<li><a href="#what-would-be-done-differently"
+id="toc-what-would-be-done-differently">17.1 What would be done
+differently</a></li>
+<li><a href="#most-defensible-design-decision"
+id="toc-most-defensible-design-decision">17.2 Most defensible design
+decision</a></li>
+<li><a href="#least-certain-design-decision"
+id="toc-least-certain-design-decision">17.3 Least certain design
+decision</a></li>
+<li><a href="#intellectual-contribution"
+id="toc-intellectual-contribution">17.4 Intellectual
+contribution</a></li>
+</ul></li>
+<li><a href="#oral-defense-question-bank-and-model-answers"
+id="toc-oral-defense-question-bank-and-model-answers">18. Oral-Defense
+Question Bank and Model Answers</a>
+<ul>
+<li><a href="#problem-definition-and-motivation-1"
+id="toc-problem-definition-and-motivation-1">18.1 Problem Definition and
+Motivation</a>
+<ul>
+<li><a
+href="#q-what-specific-problem-does-this-solve-and-what-evidence-shows-it-is-real"
+id="toc-q-what-specific-problem-does-this-solve-and-what-evidence-shows-it-is-real">Q:
+What specific problem does this solve, and what evidence shows it is
+real?</a></li>
+<li><a href="#q-who-are-the-users-and-how-was-the-problem-validated"
+id="toc-q-who-are-the-users-and-how-was-the-problem-validated">Q: Who
+are the users and how was the problem validated?</a></li>
+<li><a
+href="#q-what-existing-solutions-were-reviewed-and-what-do-they-fail-to-do"
+id="toc-q-what-existing-solutions-were-reviewed-and-what-do-they-fail-to-do">Q:
+What existing solutions were reviewed, and what do they fail to
+do?</a></li>
+<li><a href="#q-why-is-this-a-computer-science-or-it-problem"
+id="toc-q-why-is-this-a-computer-science-or-it-problem">Q: Why is this a
+computer science or IT problem?</a></li>
+<li><a href="#q-state-the-novelty-in-one-sentence."
+id="toc-q-state-the-novelty-in-one-sentence.">Q: State the novelty in
+one sentence.</a></li>
+</ul></li>
+<li><a href="#requirements-engineering-1"
+id="toc-requirements-engineering-1">18.2 Requirements Engineering</a>
+<ul>
+<li><a href="#q-how-were-requirements-derived"
+id="toc-q-how-were-requirements-derived">Q: How were requirements
+derived?</a></li>
+<li><a href="#q-what-was-deliberately-scoped-out"
+id="toc-q-what-was-deliberately-scoped-out">Q: What was deliberately
+scoped out?</a></li>
+<li><a href="#q-how-do-requirements-trace-to-deliverables"
+id="toc-q-how-do-requirements-trace-to-deliverables">Q: How do
+requirements trace to deliverables?</a></li>
+<li><a href="#q-how-would-you-handle-stakeholdertechnical-conflict"
+id="toc-q-how-would-you-handle-stakeholdertechnical-conflict">Q: How
+would you handle stakeholder/technical conflict?</a></li>
+</ul></li>
+<li><a href="#system-design-and-architecture"
+id="toc-system-design-and-architecture">18.3 System Design and
+Architecture</a>
+<ul>
+<li><a href="#q-walk-through-the-architecture."
+id="toc-q-walk-through-the-architecture.">Q: Walk through the
+architecture.</a></li>
+<li><a href="#q-why-a-modular-monolith-rather-than-microservices"
+id="toc-q-why-a-modular-monolith-rather-than-microservices">Q: Why a
+modular monolith rather than microservices?</a></li>
+<li><a href="#q-what-are-the-single-points-of-failure"
+id="toc-q-what-are-the-single-points-of-failure">Q: What are the single
+points of failure?</a></li>
+<li><a href="#q-how-do-components-communicate-and-why-rest"
+id="toc-q-how-do-components-communicate-and-why-rest">Q: How do
+components communicate and why REST?</a></li>
+<li><a href="#q-what-patterns-were-used"
+id="toc-q-what-patterns-were-used">Q: What patterns were used?</a></li>
+</ul></li>
+<li><a href="#data-design-1" id="toc-data-design-1">18.4 Data Design</a>
+<ul>
+<li><a href="#q-explain-the-schema." id="toc-q-explain-the-schema.">Q:
+Explain the schema.</a></li>
+<li><a href="#q-what-keys-and-indexes-matter"
+id="toc-q-what-keys-and-indexes-matter">Q: What keys and indexes
+matter?</a></li>
+<li><a href="#q-how-are-integrity-and-concurrency-handled"
+id="toc-q-how-are-integrity-and-concurrency-handled">Q: How are
+integrity and concurrency handled?</a></li>
+<li><a href="#q-what-breaks-at-100-times-the-data"
+id="toc-q-what-breaks-at-100-times-the-data">Q: What breaks at 100 times
+the data?</a></li>
+<li><a href="#q-why-nosql" id="toc-q-why-nosql">Q: Why NoSQL?</a></li>
+</ul></li>
+<li><a href="#algorithms-and-complexity-1"
+id="toc-algorithms-and-complexity-1">18.5 Algorithms and Complexity</a>
+<ul>
+<li><a href="#q-what-are-the-core-algorithms"
+id="toc-q-what-are-the-core-algorithms">Q: What are the core
+algorithms?</a></li>
+<li><a href="#q-why-atomic-counter-generation"
+id="toc-q-why-atomic-counter-generation">Q: Why atomic counter
+generation?</a></li>
+<li><a href="#q-where-is-the-performance-bottleneck-and-how-do-you-know"
+id="toc-q-where-is-the-performance-bottleneck-and-how-do-you-know">Q:
+Where is the performance bottleneck and how do you know?</a></li>
+<li><a href="#q-what-would-you-optimize-first"
+id="toc-q-what-would-you-optimize-first">Q: What would you optimize
+first?</a></li>
+</ul></li>
+<li><a href="#security-and-governance-1"
+id="toc-security-and-governance-1">18.6 Security and Governance</a>
+<ul>
+<li><a href="#q-how-do-authentication-and-authorization-work"
+id="toc-q-how-do-authentication-and-authorization-work">Q: How do
+authentication and authorization work?</a></li>
+<li><a href="#q-what-if-a-token-is-stolen"
+id="toc-q-what-if-a-token-is-stolen">Q: What if a token is
+stolen?</a></li>
+<li><a href="#q-what-are-the-top-three-attacks"
+id="toc-q-what-are-the-top-three-attacks">Q: What are the top three
+attacks?</a></li>
+<li><a href="#q-how-is-data-protected"
+id="toc-q-how-is-data-protected">Q: How is data protected?</a></li>
+<li><a href="#q-which-standard-was-followed"
+id="toc-q-which-standard-was-followed">Q: Which standard was
+followed?</a></li>
+<li><a href="#q-what-if-database-credentials-leak"
+id="toc-q-what-if-database-credentials-leak">Q: What if database
+credentials leak?</a></li>
+</ul></li>
+<li><a href="#software-engineering-process-1"
+id="toc-software-engineering-process-1">18.7 Software Engineering
+Process</a>
+<ul>
+<li><a href="#q-what-methodology-was-followed"
+id="toc-q-what-methodology-was-followed">Q: What methodology was
+followed?</a></li>
+<li><a href="#q-how-was-version-control-managed"
+id="toc-q-how-was-version-control-managed">Q: How was version control
+managed?</a></li>
+<li><a href="#q-what-testing-was-performed"
+id="toc-q-what-testing-was-performed">Q: What testing was
+performed?</a></li>
+<li><a href="#q-was-there-code-review-or-cicd"
+id="toc-q-was-there-code-review-or-cicd">Q: Was there code review or
+CI/CD?</a></li>
+<li><a href="#q-how-is-maintainability-supported"
+id="toc-q-how-is-maintainability-supported">Q: How is maintainability
+supported?</a></li>
+</ul></li>
+<li><a href="#aiml-questions" id="toc-aiml-questions">18.8 AI/ML
+Questions</a>
+<ul>
+<li><a href="#q-what-ai-model-did-the-system-use"
+id="toc-q-what-ai-model-did-the-system-use">Q: What AI model did the
+system use?</a></li>
+<li><a href="#q-how-would-you-evaluate-a-future-model"
+id="toc-q-how-would-you-evaluate-a-future-model">Q: How would you
+evaluate a future model?</a></li>
+</ul></li>
+<li><a href="#testing-and-evaluation-1"
+id="toc-testing-and-evaluation-1">18.9 Testing and Evaluation</a>
+<ul>
+<li><a href="#q-how-do-you-know-the-system-meets-requirements"
+id="toc-q-how-do-you-know-the-system-meets-requirements">Q: How do you
+know the system meets requirements?</a></li>
+<li><a href="#q-give-an-initially-failing-case-and-fix."
+id="toc-q-give-an-initially-failing-case-and-fix.">Q: Give an initially
+failing case and fix.</a></li>
+<li><a href="#q-was-load-testing-performed"
+id="toc-q-was-load-testing-performed">Q: Was load testing
+performed?</a></li>
+<li><a href="#q-who-tested-it-besides-the-developer"
+id="toc-q-who-tested-it-besides-the-developer">Q: Who tested it besides
+the developer?</a></li>
+</ul></li>
+<li><a href="#critical-reflection" id="toc-critical-reflection">18.10
+Critical Reflection</a>
+<ul>
+<li><a href="#q-what-is-the-single-biggest-limitation"
+id="toc-q-what-is-the-single-biggest-limitation">Q: What is the single
+biggest limitation?</a></li>
+<li><a href="#q-what-would-you-do-differently"
+id="toc-q-what-would-you-do-differently">Q: What would you do
+differently?</a></li>
+<li><a href="#q-what-did-you-learn-technically"
+id="toc-q-what-did-you-learn-technically">Q: What did you learn
+technically?</a></li>
+<li><a href="#q-defend-a-decision-you-are-least-confident-about."
+id="toc-q-defend-a-decision-you-are-least-confident-about.">Q: Defend a
+decision you are least confident about.</a></li>
+<li><a href="#q-what-did-you-add-rather-than-assemble"
+id="toc-q-what-did-you-add-rather-than-assemble">Q: What did you add
+rather than assemble?</a></li>
+<li><a href="#q-how-does-this-demonstrate-csit-mastery"
+id="toc-q-how-does-this-demonstrate-csit-mastery">Q: How does this
+demonstrate CS/IT mastery?</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#demonstration-script" id="toc-demonstration-script">19.
+Demonstration Script</a>
+<ul>
+<li><a href="#preparation" id="toc-preparation">19.1
+Preparation</a></li>
+<li><a href="#main-scenario" id="toc-main-scenario">19.2 Main
+scenario</a></li>
+<li><a href="#security-scenario" id="toc-security-scenario">19.3
+Security scenario</a></li>
+<li><a href="#reflection-during-demonstration"
+id="toc-reflection-during-demonstration">19.4 Reflection during
+demonstration</a></li>
+</ul></li>
+<li><a href="#conclusion" id="toc-conclusion">20. Conclusion</a></li>
+<li><a href="#references-and-evidence-map"
+id="toc-references-and-evidence-map">21. References and Evidence Map</a>
+<ul>
+<li><a href="#internal-project-evidence"
+id="toc-internal-project-evidence">21.1 Internal project
+evidence</a></li>
+<li><a
+href="#external-frameworks-to-cite-in-a-formal-academic-bibliography"
+id="toc-external-frameworks-to-cite-in-a-formal-academic-bibliography">21.2
+External frameworks to cite in a formal academic bibliography</a></li>
+<li><a href="#appendix-a-short-defense-opening"
+id="toc-appendix-a-short-defense-opening">Appendix A: Short Defense
+Opening</a></li>
+<li><a href="#appendix-b-one-minute-architecture-answer"
+id="toc-appendix-b-one-minute-architecture-answer">Appendix B:
+One-Minute Architecture Answer</a></li>
+<li><a href="#appendix-c-one-minute-limitation-answer"
+id="toc-appendix-c-one-minute-limitation-answer">Appendix C: One-Minute
+Limitation Answer</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="hostelfix">HostelFix</h1>
+<h2
+id="design-and-implementation-of-a-role-based-maintenance-reporting-and-tracking-system-for-university-of-ghana-halls">Design
+and Implementation of a Role-Based Maintenance Reporting and Tracking
+System for University of Ghana Halls</h2>
+<p><strong>Technical Project and Oral-Defense Document</strong></p>
+<p><strong>Candidate:</strong> [Insert candidate name]<br />
+<strong>Student ID:</strong> [Insert student ID]<br />
+<strong>Programme:</strong> [Insert programme]<br />
+<strong>Department:</strong> [Insert department]<br />
+<strong>Supervisor:</strong> [Insert supervisor name]<br />
+<strong>Institution:</strong> University of Ghana<br />
+<strong>Date:</strong> September 2026</p>
+<hr />
+<h2 id="abstract">Abstract</h2>
+<p>HostelFix is a web-based maintenance reporting and tracking system
+designed for University of Ghana student halls. It provides a shared
+operational record for students, hall managers, maintenance personnel,
+university administrators, and system administrators. The system
+addresses fragmented reporting through verbal complaints, paper
+logbooks, informal messaging, and disconnected follow-up. Its purpose is
+not to replace the physical and social processes through which
+maintenance work occurs. Instead, it records four operational facts:
+what is broken, whether the responsible team knows, whether the problem
+was fixed, and whether the resident disputes the resolution.</p>
+<p>The implemented system uses a Next.js 16 frontend, an Express 5 and
+TypeScript backend, and MongoDB through Mongoose. Authentication uses
+short-lived JSON Web Tokens and opaque refresh tokens stored in
+HTTP-only cookies. Authorization combines role-based access control with
+object-level ownership and assigned-hall checks. Images are uploaded
+directly to Cloudinary, while MongoDB stores controlled metadata and
+image URLs. Material actions produce issue events and audit logs.
+Background jobs handle notification delivery, overdue escalation, and
+automatic closure of resolved issues after a configurable dispute
+window.</p>
+<p>A major design contribution is the simplification of the issue
+lifecycle from a rigid six-stage digital workflow to a lightweight
+operational record:</p>
+<pre class="text"><code>Submitted -&gt; Acknowledged -&gt; Resolved -&gt; Closed
+    |                              |
+ Rejected                       Reopened</code></pre>
+<p>Acknowledgement records awareness rather than granting permission for
+work. Individual assignment and an <code>in_progress</code> update are
+optional, allowing maintenance to proceed through practical channels
+such as direct conversation, telephone, WhatsApp, a caretaker, or a
+contractor. This design reduces administrative bottlenecks while
+retaining accountability, scoped access, analytics, and an immutable
+history.</p>
+<p>The backend currently passes 30 automated tests covering unit,
+integration, and permission-denial behavior. The frontend passes its
+available unit tests, TypeScript checking, linting with non-blocking
+image warnings, and a production build. Important limitations remain:
+formal user-acceptance and load testing have not been documented;
+duplicate reports cannot be linked; resolution messages are accepted by
+validation but are not currently persisted; completion evidence is not
+separately modeled; and production infrastructure such as persistent
+queues, centralized monitoring, backup policy, and emergency-contact UI
+still requires completion.</p>
+<p><strong>Keywords:</strong> maintenance reporting, university halls,
+role-based access control, MongoDB, Next.js, Express, workflow design,
+audit trail, information systems</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol type="1">
+<li>Introduction</li>
+<li>Problem Definition and Motivation</li>
+<li>Stakeholders and Scope</li>
+<li>Requirements Engineering</li>
+<li>Operational Workflow</li>
+<li>System Architecture</li>
+<li>Technology and Design Decisions</li>
+<li>Data Design</li>
+<li>API and Module Design</li>
+<li>Frontend Design</li>
+<li>Algorithms and Complexity</li>
+<li>Security and Governance</li>
+<li>Software Engineering Process</li>
+<li>Testing and Evaluation</li>
+<li>Deployment and Operations</li>
+<li>Limitations and Future Work</li>
+<li>Critical Reflection and Intellectual Contribution</li>
+<li>Oral-Defense Question Bank and Model Answers</li>
+<li>Demonstration Script</li>
+<li>Conclusion</li>
+<li>References and Evidence Map</li>
+</ol>
+<hr />
+<h1 id="introduction">1. Introduction</h1>
+<p>Maintenance reporting in a university residence is both a technical
+and organizational problem. A student may notice a leaking pipe, damaged
+electrical fitting, blocked washroom, or structural defect. The problem
+may be reported verbally to a porter, through a hall messaging group, by
+telephone, or in a paper logbook. Work may then be assigned informally
+to a plumber, electrician, caretaker, university maintenance employee,
+or external contractor. The physical work can occur before any formal
+digital update is made.</p>
+<p>A badly designed information system attempts to control every one of
+these actions. It may require verification, assignment, acceptance, and
+progress updates before a worker is allowed to record a repair. That
+approach creates a bottleneck and encourages staff to bypass the
+application. HostelFix therefore treats the application as a reliable
+operational record, not as the exclusive channel through which work must
+happen.</p>
+<p>The project delivers:</p>
+<ul>
+<li>A responsive web interface for students and staff.</li>
+<li>A REST API containing domain and authorization rules.</li>
+<li>A MongoDB data store for current state and historical events.</li>
+<li>Role-aware dashboards under one canonical <code>/dashboard</code>
+route.</li>
+<li>Controlled issue creation, acknowledgement, resolution, reopening,
+and closure.</li>
+<li>Hall-scoped access for hall managers and maintenance personnel.</li>
+<li>Cross-hall analytics and audit access for administrators.</li>
+<li>Background processing for notifications, overdue escalation, and
+auto-close.</li>
+<li>OpenAPI documentation and automated tests.</li>
+</ul>
+<h1 id="problem-definition-and-motivation">2. Problem Definition and
+Motivation</h1>
+<h2 id="problem-statement">2.1 Problem statement</h2>
+<p>Maintenance reports in student halls can become fragmented across
+verbal reports, messaging applications, paper records, and personal
+follow-up. This produces several failures:</p>
+<ol type="1">
+<li>A student cannot reliably determine whether a report was
+received.</li>
+<li>Hall management lacks a consolidated queue of unresolved
+problems.</li>
+<li>Maintenance completion may not be communicated back to the
+reporter.</li>
+<li>Repeated faults and unsuccessful repairs are difficult to
+identify.</li>
+<li>University administrators lack comparable cross-hall response
+data.</li>
+<li>Informal maintenance work leaves a weak accountability trail.</li>
+</ol>
+<p>HostelFix solves the information-coordination part of this problem by
+maintaining a role-scoped, auditable record without requiring every
+physical handoff to occur digitally.</p>
+<h2 id="evidence-and-validation-status">2.2 Evidence and validation
+status</h2>
+<p>The strongest evidence currently represented in the project is
+operational reasoning captured in the accepted workflow decision: hall
+maintenance often proceeds through caretakers, direct conversation,
+telephone, messaging, and existing maintenance structures. The original
+workflow was explicitly rejected because it would force digital updates
+before work could proceed.</p>
+<p>However, the repository does not contain a completed survey dataset,
+interview transcripts, a signed user-acceptance report, or quantified
+baseline measurements from the halls. Therefore, the academically
+defensible statement is:</p>
+<blockquote>
+<p>The problem is supported by observed and domain-informed workflow
+analysis, but formal empirical validation with representative University
+of Ghana stakeholders remains future evaluation work.</p>
+</blockquote>
+<p>A defense should not claim surveys or interviews unless the candidate
+can produce them. A suitable validation plan would involve:</p>
+<ul>
+<li>Semi-structured interviews with hall managers, porters, maintenance
+staff, and students.</li>
+<li>A questionnaire measuring current reporting channels, lost reports,
+response visibility, and satisfaction.</li>
+<li>Review of existing maintenance logbooks or messaging records,
+subject to approval and privacy controls.</li>
+<li>A pilot in one hall comparing report acknowledgement time,
+resolution time, and reopening rate before and after adoption.</li>
+</ul>
+<h2 id="existing-alternatives-and-their-gaps">2.3 Existing alternatives
+and their gaps</h2>
+<p>The system is not claiming that no maintenance tools exist. The
+relevant alternatives are:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Alternative</th>
+<th>Strength</th>
+<th>Gap addressed by HostelFix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Verbal report</td>
+<td>Fast and familiar</td>
+<td>Weak traceability, follow-up, and analytics</td>
+</tr>
+<tr>
+<td>WhatsApp or telephone</td>
+<td>Immediate communication</td>
+<td>Reports are mixed with unrelated conversation and difficult to
+aggregate</td>
+</tr>
+<tr>
+<td>Paper logbook</td>
+<td>Simple shared record</td>
+<td>Limited remote access, search, notifications, and cross-hall
+analysis</td>
+</tr>
+<tr>
+<td>Generic ticketing system</td>
+<td>Mature ticket management</td>
+<td>Often imposes assignment-heavy workflows and is not hall-, room-, or
+student-aware</td>
+</tr>
+<tr>
+<td>Spreadsheet</td>
+<td>Flexible and inexpensive</td>
+<td>Weak access control, concurrency management, auditability, and
+user-specific views</td>
+</tr>
+</tbody>
+</table>
+<p>HostelFix combines the speed of informal coordination with a
+controlled operational record designed around halls, locations, resident
+ownership, dispute windows, and University roles.</p>
+<h2 id="why-this-is-a-computing-problem">2.4 Why this is a computing
+problem</h2>
+<p>The underlying maintenance shortage or procurement process cannot be
+solved by software alone. The computing problem is the reliable
+management of identity, access, state, history, notifications, and
+analytics across multiple actors. Specifically, the project
+requires:</p>
+<ul>
+<li>Authentication and secure session management.</li>
+<li>Object-level authorization over sensitive residence records.</li>
+<li>Concurrent creation of unique report references.</li>
+<li>State-transition enforcement.</li>
+<li>Query optimization and indexing.</li>
+<li>Background scheduling and asynchronous notification.</li>
+<li>Data validation and integrity controls.</li>
+<li>Responsive role-based user interfaces.</li>
+<li>Auditability and measurable operational outcomes.</li>
+</ul>
+<p>Thus, HostelFix is an information-system intervention inside a
+broader organizational process. It does not claim that software itself
+repairs facilities.</p>
+<h2 id="novelty-statement">2.5 Novelty statement</h2>
+<blockquote>
+<p>HostelFix contributes a low-friction, hall-scoped maintenance record
+that preserves accountability while deliberately allowing physical work
+to proceed outside the digital workflow.</p>
+</blockquote>
+<h1 id="stakeholders-and-scope">3. Stakeholders and Scope</h1>
+<h2 id="stakeholders">3.1 Stakeholders</h2>
+<h3 id="student-resident">Student resident</h3>
+<ul>
+<li>Reports a defect.</li>
+<li>Sees only their own issue records.</li>
+<li>Tracks acknowledgement and resolution.</li>
+<li>Reopens an unsuccessful resolution during the dispute window.</li>
+</ul>
+<h3 id="hall-manager-or-caretaker">Hall manager or caretaker</h3>
+<ul>
+<li>Sees issues only in assigned halls.</li>
+<li>Acknowledges, rejects, or requests clarification.</li>
+<li>Reviews operational priority.</li>
+<li>Coordinates work through practical offline or online channels.</li>
+<li>Can record resolution or close a resolved issue.</li>
+</ul>
+<h3 id="maintenance-personnel">Maintenance personnel</h3>
+<ul>
+<li>Sees issues in assigned halls.</li>
+<li>Can record resolution without being individually assigned.</li>
+<li>Does not have to mark an issue <code>in_progress</code>.</li>
+</ul>
+<h3 id="university-administrator">University administrator</h3>
+<ul>
+<li>Sees cross-hall analytics.</li>
+<li>Reviews audit records and users according to policy.</li>
+<li>Monitors backlog, overdue reports, recurring categories, and
+resolution times.</li>
+</ul>
+<h3 id="system-administrator">System administrator</h3>
+<ul>
+<li>Manages technical configuration and role changes.</li>
+<li>Does not rewrite historical issue events.</li>
+</ul>
+<h3 id="indirect-stakeholders">Indirect stakeholders</h3>
+<ul>
+<li>University management.</li>
+<li>Porters and caretakers.</li>
+<li>External contractors.</li>
+<li>Data protection and IT operations personnel.</li>
+</ul>
+<h2 id="in-scope">3.2 In scope</h2>
+<ul>
+<li>Authenticated reporting by provisioned users.</li>
+<li>University-managed hall and location directory.</li>
+<li>Categories, priority, descriptions, and initial images.</li>
+<li>Role-aware dashboard and navigation.</li>
+<li>Issue status and event history.</li>
+<li>Hall-scoped maintenance and management access.</li>
+<li>Optional assignment metadata.</li>
+<li>Notifications and audit logging.</li>
+<li>Analytics and overdue calculation.</li>
+<li>Auto-close and reopening.</li>
+<li>OpenAPI documentation.</li>
+</ul>
+<h2 id="out-of-scope-or-incomplete">3.3 Out of scope or incomplete</h2>
+<ul>
+<li>Public registration.</li>
+<li>Procurement, inventory, vendor payment, and spare-parts
+management.</li>
+<li>GPS technician tracking.</li>
+<li>Artificial intelligence or machine-learning diagnosis.</li>
+<li>Real-time emergency dispatch.</li>
+<li>Formal contractor onboarding.</li>
+<li>Structured duplicate-report linking.</li>
+<li>Separate completion-photo evidence.</li>
+<li>Production-grade persistent queues and multi-instance rate-limit
+storage.</li>
+<li>A documented institution-wide user-acceptance or load test.</li>
+</ul>
+<h2 id="residence-scope-discrepancy-discovered-during-audit">3.4
+Residence scope discrepancy discovered during audit</h2>
+<p>The original documentation described nine halls: five traditional
+halls and four UGEL halls. The current seed implementation contains ten
+halls because it also includes Diamond Jubilee Hall. This must be
+resolved before final institutional deployment: either formally approve
+the tenth hall and update all scope statements, or remove it from the
+approved seed list. This document reports the current code truth rather
+than hiding the discrepancy.</p>
+<h1 id="requirements-engineering">4. Requirements Engineering</h1>
+<h2 id="elicitation-approach">4.1 Elicitation approach</h2>
+<p>The requirements were derived primarily through:</p>
+<ul>
+<li>Stakeholder-role analysis.</li>
+<li>Use-case analysis.</li>
+<li>Workflow modeling.</li>
+<li>Security and permission-matrix analysis.</li>
+<li>Iterative architectural review.</li>
+<li>Critical reflection on real maintenance practices.</li>
+</ul>
+<p>The pivotal requirement change came from questioning the original
+rigid lifecycle. The system initially modeled
+<code>Submitted -&gt; Verified -&gt; Assigned -&gt; In Progress -&gt; Resolved -&gt; Closed</code>.
+Operational analysis showed that this would make software a prerequisite
+for work and reduce adoption. The revised requirement was that the
+system must record awareness and completion without blocking informal
+work.</p>
+<p>No formal interview or questionnaire artifact is currently stored in
+the repository. That is a research-method limitation and should be
+stated honestly.</p>
+<h2 id="functional-requirements">4.2 Functional requirements</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Implemented evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-01</td>
+<td>Provisioned users shall log in using ID/email and PIN/password</td>
+<td>Auth module and login page</td>
+</tr>
+<tr>
+<td>FR-02</td>
+<td>The system shall render role-specific content under
+<code>/dashboard</code></td>
+<td>Auth provider, role dashboard, navigation</td>
+</tr>
+<tr>
+<td>FR-03</td>
+<td>A user shall create a report with hall, room, category, priority,
+description, and optional images</td>
+<td>Issue form and <code>POST /issues</code></td>
+</tr>
+<tr>
+<td>FR-04</td>
+<td>Students shall see only their own issues</td>
+<td>Issue query policy and permission test</td>
+</tr>
+<tr>
+<td>FR-05</td>
+<td>Hall staff shall see only assigned-hall issues</td>
+<td>Hall-scoped query and permission test</td>
+</tr>
+<tr>
+<td>FR-06</td>
+<td>Hall management shall acknowledge, reject, or request
+clarification</td>
+<td>Acknowledge endpoint</td>
+</tr>
+<tr>
+<td>FR-07</td>
+<td>Authorized hall staff shall resolve without formal assignment</td>
+<td>Status policy</td>
+</tr>
+<tr>
+<td>FR-08</td>
+<td>A resolved issue shall have a configurable dispute window</td>
+<td>Resolution service and environment configuration</td>
+</tr>
+<tr>
+<td>FR-09</td>
+<td>A student shall reopen their own resolved issue</td>
+<td>Reopen endpoint and frontend action</td>
+</tr>
+<tr>
+<td>FR-10</td>
+<td>The system shall auto-close expired resolved issues</td>
+<td>Hourly cron job</td>
+</tr>
+<tr>
+<td>FR-11</td>
+<td>Material issue actions shall create historical events and audit
+logs</td>
+<td>Issue event and audit modules</td>
+</tr>
+<tr>
+<td>FR-12</td>
+<td>Administrators shall view aggregate metrics</td>
+<td>Analytics module and admin dashboard</td>
+</tr>
+<tr>
+<td>FR-13</td>
+<td>Images shall be uploaded externally and referenced by URL</td>
+<td>Cloudinary signature and URL validation</td>
+</tr>
+<tr>
+<td>FR-14</td>
+<td>Legacy role-specific URLs shall redirect to the canonical dashboard
+namespace</td>
+<td>Next.js redirects</td>
+</tr>
+</tbody>
+</table>
+<h2 id="non-functional-requirements">4.3 Non-functional
+requirements</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Category</th>
+<th>Requirement</th>
+<th>Current response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Security</td>
+<td>Enforce authentication, role, ownership, and hall scope</td>
+<td>JWT/cookies, policies, negative tests</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Support indexed dashboard and queue queries</td>
+<td>Compound MongoDB indexes and aggregation</td>
+</tr>
+<tr>
+<td>Reliability</td>
+<td>Save reports independently of notification-provider
+availability</td>
+<td>In-memory asynchronous queue</td>
+</tr>
+<tr>
+<td>Maintainability</td>
+<td>Separate routes, validation, services, policies, and models</td>
+<td>Modular-monolith structure</td>
+</tr>
+<tr>
+<td>Usability</td>
+<td>Minimize required status updates</td>
+<td>Simplified lifecycle</td>
+</tr>
+<tr>
+<td>Auditability</td>
+<td>Preserve material actions</td>
+<td>Issue events and audit logs</td>
+</tr>
+<tr>
+<td>Portability</td>
+<td>Permit future mobile or alternate clients</td>
+<td>REST API owns domain rules</td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>Define API contract</td>
+<td>OpenAPI YAML and supporting docs</td>
+</tr>
+<tr>
+<td>Accessibility</td>
+<td>Provide labeled, responsive interfaces</td>
+<td>Design goal; formal WCAG audit not yet documented</td>
+</tr>
+</tbody>
+</table>
+<h2 id="requirements-traceability-examples">4.4 Requirements
+traceability examples</h2>
+<ul>
+<li><strong>Student isolation</strong> maps to the issue list query,
+issue object policy, <code>/dashboard/issues</code>, and
+<code>student-isolation.test.ts</code>.</li>
+<li><strong>Hall isolation</strong> maps to assigned hall IDs, hall
+policy, hall-scoped issue query, hall-manager dashboard, and
+<code>hall-scope.test.ts</code>.</li>
+<li><strong>No maintenance bottleneck</strong> maps to the simplified
+constants, transition policy, resolution UI, and ADR 001.</li>
+<li><strong>Automatic closure</strong> maps to
+<code>RESOLVE_DISPUTE_WINDOW_HOURS</code>,
+<code>disputeWindowExpiresAt</code>, the auto-close job, and auto-close
+integration tests.</li>
+</ul>
+<h2 id="handling-conflicting-requirements">4.5 Handling conflicting
+requirements</h2>
+<p>A stakeholder may ask for maximum accountability through mandatory
+assignment while operational users ask for fewer updates. The resolution
+used here is to separate mandatory state from optional metadata:</p>
+<ul>
+<li>The required state remains small.</li>
+<li>Assignment remains available for accountability.</li>
+<li>Assignment does not prevent work or resolution.</li>
+<li>Audit events preserve who performed the digital action.</li>
+</ul>
+<p>This is a general requirements-engineering principle: preserve the
+underlying goal while reducing the mechanism’s operational cost.</p>
+<h1 id="operational-workflow">5. Operational Workflow</h1>
+<h2 id="main-lifecycle">5.1 Main lifecycle</h2>
+<pre class="text"><code>Submitted -&gt; Acknowledged -&gt; Resolved -&gt; Closed
+    |                              |
+ Rejected                       Reopened</code></pre>
+<p>Clarification is an event that retains <code>submitted</code>; it is
+not another persistent status.</p>
+<h2 id="detailed-flow">5.2 Detailed flow</h2>
+<ol type="1">
+<li>A student signs in and reports a defect.</li>
+<li>The backend derives the reporter from the authenticated
+session.</li>
+<li>The backend resolves the selected hall and room to a controlled
+location.</li>
+<li>A unique reference number is allocated.</li>
+<li>The issue is stored with status <code>submitted</code>.</li>
+<li>A creation event and audit log are written.</li>
+<li>Hall management may acknowledge, reject, or request
+clarification.</li>
+<li>Physical work proceeds through any practical authorized
+channel.</li>
+<li>An assigned-hall manager, maintenance user, or administrator records
+<code>resolved</code>.</li>
+<li>The backend records <code>resolvedAt</code> and calculates
+<code>disputeWindowExpiresAt</code>.</li>
+<li>The reporter is notified.</li>
+<li>The reporter may reopen the report if the repair is
+unsatisfactory.</li>
+<li>Otherwise, an hourly job changes expired resolved issues to
+<code>closed</code>.</li>
+</ol>
+<h2 id="direct-resolution">5.3 Direct resolution</h2>
+<p>The policy allows <code>submitted -&gt; resolved</code>. This is
+deliberate. It handles cases where a caretaker or technician repairs the
+problem before hall management opens the application. Requiring
+retrospective acknowledgement would add no operational value.</p>
+<h2 id="maintenance-role-justification">5.4 Maintenance-role
+justification</h2>
+<p>The maintenance function is necessary, but a mandatory
+maintenance-system interaction is not. Keeping the role provides:</p>
+<ul>
+<li>A scoped work view for regular university personnel.</li>
+<li>Attribution for staff who choose to update the system.</li>
+<li>Separation between coordination and physical execution.</li>
+</ul>
+<p>Making it optional prevents adoption failure when work is performed
+by a contractor, caretaker, or worker without an account. In such a
+case, hall management records the digital resolution.</p>
+<h2 id="emergency-behavior">5.5 Emergency behavior</h2>
+<p>HostelFix is not an emergency-dispatch platform. For fire, exposed
+wiring, severe flooding, sewage overflow, or structural danger, users
+must contact the responsible emergency or hall personnel first. The
+record can be created or updated during or after the response. A future
+interface should show approved emergency contacts prominently.</p>
+<h1 id="system-architecture">6. System Architecture</h1>
+<h2 id="architectural-style">6.1 Architectural style</h2>
+<p>HostelFix is a client-server system with a modular-monolith
+backend.</p>
+<pre class="text"><code>Browser
+  |
+  | HTTPS/JSON + HTTP-only cookies
+  v
+Next.js frontend
+  |
+  | REST/JSON with credentials
+  v
+Express modular API
+  |-- Authentication and authorization
+  |-- Residence directory
+  |-- Issues and assignments
+  |-- Notifications and jobs
+  |-- Analytics and audit logs
+  |
+  +--&gt; MongoDB
+  +--&gt; Cloudinary
+  +--&gt; Email adapter</code></pre>
+<h2 id="why-a-modular-monolith">6.2 Why a modular monolith</h2>
+<p>A modular monolith was selected because the project has one coherent
+domain, one primary development team, and no demonstrated need for
+independent service scaling. Compared with microservices, it
+provides:</p>
+<ul>
+<li>Simpler transactions and data consistency.</li>
+<li>Easier local development and deployment.</li>
+<li>Fewer network failure modes.</li>
+<li>Centralized authentication and policy enforcement.</li>
+<li>Lower operational cost.</li>
+</ul>
+<p>The modules still create boundaries that could support later
+extraction. Notifications, analytics, and image processing are the best
+future candidates if load or team ownership justifies separation.</p>
+<h2 id="alternatives-rejected">6.3 Alternatives rejected</h2>
+<h3 id="microservices">Microservices</h3>
+<p>Rejected for the initial release because they would add distributed
+tracing, service authentication, deployment coordination, message
+delivery, and consistency complexity without evidence that the scale
+requires it.</p>
+<h3 id="next.js-only-backend">Next.js-only backend</h3>
+<p>Rejected because domain rules should remain reusable by a future
+mobile client or institutional integration. Express provides an explicit
+API boundary.</p>
+<h3 id="serverless-functions">Serverless functions</h3>
+<p>Not selected because scheduled jobs, shared authorization, local
+MongoDB development, and predictable modular routing are simpler in the
+current long-running backend. Serverless remains possible after adapting
+jobs and connection management.</p>
+<h2 id="internal-module-pattern">6.4 Internal module pattern</h2>
+<p>Each backend feature generally contains:</p>
+<ul>
+<li>Routes: HTTP endpoint mapping and middleware.</li>
+<li>Validation: Zod request schemas.</li>
+<li>Controller: translation between HTTP and service calls.</li>
+<li>Service: business rules and persistence coordination.</li>
+<li>Model: Mongoose schema and indexes.</li>
+<li>Policy: reusable authorization decisions where applicable.</li>
+</ul>
+<p>This resembles layered architecture and the service/policy patterns.
+Controllers remain thin, services own workflows, and policies answer
+permission questions.</p>
+<h2 id="communication-protocols">6.5 Communication protocols</h2>
+<p>REST over HTTP with JSON was chosen because:</p>
+<ul>
+<li>Browser and mobile clients support it directly.</li>
+<li>The operations are resource-oriented.</li>
+<li>OpenAPI can document the contract.</li>
+<li>The expected traffic does not require binary RPC optimization.</li>
+<li>Debugging and institutional integration are straightforward.</li>
+</ul>
+<p>An in-memory queue decouples notification attempts from report
+persistence. This queue is suitable for development and a single
+process, but production should use a durable queue such as BullMQ with
+Redis or a managed alternative.</p>
+<h2 id="single-points-of-failure">6.6 Single points of failure</h2>
+<p>Current single points of failure include:</p>
+<ul>
+<li>One Express process.</li>
+<li>One MongoDB instance in local development.</li>
+<li>An in-memory notification queue.</li>
+<li>External Cloudinary availability for new image uploads.</li>
+<li>A single configured email provider.</li>
+</ul>
+<p>For higher availability, deploy multiple stateless API instances
+behind a load balancer, use a MongoDB replica set, place jobs in a
+persistent distributed queue, use shared rate-limit storage, monitor
+external providers, and implement backup and restore procedures.</p>
+<h1 id="technology-and-design-decisions">7. Technology and Design
+Decisions</h1>
+<h2 id="frontend">7.1 Frontend</h2>
+<ul>
+<li>Next.js 16.3.4 with App Router.</li>
+<li>React 19.</li>
+<li>TypeScript strict checking.</li>
+<li>Tailwind CSS 4 and shadcn/base UI primitives.</li>
+<li>TanStack Query for server state.</li>
+<li>React Hook Form and Zod for forms.</li>
+<li>Axios with credentials for API calls.</li>
+<li>Recharts for analytics.</li>
+</ul>
+<h2 id="backend">7.2 Backend</h2>
+<ul>
+<li>Node.js and Express 5.</li>
+<li>TypeScript 5.9.</li>
+<li>Mongoose 9 and MongoDB.</li>
+<li>Zod validation.</li>
+<li>JWT access tokens and opaque refresh tokens.</li>
+<li>bcrypt for PIN/password hashing.</li>
+<li>Pino structured logging.</li>
+<li>node-cron for scheduled jobs.</li>
+<li>Vitest, Supertest, and MongoDB Memory Server for testing.</li>
+</ul>
+<h2 id="why-mongodb">7.3 Why MongoDB</h2>
+<p>MongoDB fits the implemented workload because:</p>
+<ul>
+<li>Issue records are naturally document-oriented.</li>
+<li>Status, category, timestamps, image URLs, and references are
+retrieved together.</li>
+<li>The schema can evolve as maintenance evidence and metadata
+mature.</li>
+<li>Mongoose provides validation, references, indexes, and a typed
+application model.</li>
+<li>Aggregation supports dashboard metrics.</li>
+</ul>
+<p>MongoDB was not chosen because relationships do not exist. Users,
+halls, locations, issues, events, and assignments are related through
+object IDs. A relational database would also be valid, especially for
+stronger relational constraints and reporting joins. The trade-off
+accepted here is application- and schema-level reference management in
+exchange for flexible document evolution and natural current-state
+retrieval.</p>
+<h2 id="why-external-image-storage">7.4 Why external image storage</h2>
+<p>Storing images directly in MongoDB would enlarge backups and API
+memory use. Cloudinary handles binary storage and transformation. The
+application stores HTTPS URLs and metadata. The upload is signed by the
+backend and performed directly by the browser.</p>
+<h1 id="data-design">8. Data Design</h1>
+<h2 id="main-collections">8.1 Main collections</h2>
+<h3 id="users">Users</h3>
+<p>Contains student/staff identity, email, password hash, role, active
+state, assigned halls, and optional allocated location.</p>
+<p>Important uniqueness constraints:</p>
+<ul>
+<li><code>studentId</code> sparse unique.</li>
+<li><code>staffId</code> sparse unique.</li>
+<li><code>email</code> unique.</li>
+</ul>
+<h3 id="halls-and-locations">Halls and locations</h3>
+<p>Halls provide controlled residence identity. Locations represent
+rooms and common areas. Issues reference hall and location rather than
+storing uncontrolled descriptions repeatedly.</p>
+<h3 id="issues">Issues</h3>
+<p>Stores current operational state:</p>
+<ul>
+<li>Unique reference number.</li>
+<li>Reporter, hall, and location references.</li>
+<li>Category and reported/operational priority.</li>
+<li>Current status.</li>
+<li>Description and initial image URLs.</li>
+<li>Optional assigned personnel IDs.</li>
+<li>Submitted, resolved, closed, and dispute-window timestamps.</li>
+</ul>
+<h3 id="issue-events">Issue events</h3>
+<p>Stores historical actions such as creation, acknowledgement,
+clarification, rejection, priority changes, comments, reopening,
+resolution, closure, and escalation.</p>
+<h3 id="audit-logs">Audit logs</h3>
+<p>Stores system-wide actor, action, resource, metadata, and timestamp
+records for administrative accountability.</p>
+<h3 id="refresh-and-reset-tokens">Refresh and reset tokens</h3>
+<p>The database stores hashes rather than raw refresh and reset tokens,
+reducing exposure if those collections are read.</p>
+<h3 id="reference-counters">Reference counters</h3>
+<p>An atomic counter per hall code and date generates references such
+as:</p>
+<pre class="text"><code>HF-AKU-20260922-0001</code></pre>
+<h2 id="relationship-overview">8.2 Relationship overview</h2>
+<pre class="text"><code>User 1 ---- * Issue (reporter)
+Hall 1 ---- * Location
+Hall 1 ---- * Issue
+Location 1 ---- * Issue
+Issue 1 ---- * IssueEvent
+Issue * ---- * User (optional assignment)
+User 1 ---- * RefreshToken
+Issue 1 ---- * Notification</code></pre>
+<p>MongoDB does not enforce foreign keys in the same manner as a
+relational database. Integrity is protected through controlled service
+operations, Mongoose references, validation, authorization, and seed
+data.</p>
+<h2 id="indexes">8.3 Indexes</h2>
+<p>The issue model includes:</p>
+<ul>
+<li>Unique index on <code>referenceNumber</code>.</li>
+<li><code>{ hallId, status, priority, createdAt }</code> for hall queues
+and sorting.</li>
+<li><code>{ reporterId, createdAt }</code> for student history.</li>
+<li><code>{ assignedToIds, status, updatedAt }</code> for optional
+personnel views.</li>
+<li><code>{ category, hallId, createdAt }</code> for category/hall
+analysis.</li>
+<li><code>{ status, priority, submittedAt }</code> for overdue and
+operational filtering.</li>
+</ul>
+<p>Indexes convert many common lookups from collection scans toward
+logarithmic index lookup plus result retrieval. They also impose write
+and storage cost, so indexes are chosen around actual dashboard and
+queue access patterns.</p>
+<h2 id="concurrent-writes">8.4 Concurrent writes</h2>
+<p>Unique reference generation uses <code>findOneAndUpdate</code> with
+atomic <code>$inc</code> and a unique <code>(hallCode, date)</code>
+index. Concurrent submissions therefore increment one server-side
+counter rather than reading and writing a sequence in separate
+operations.</p>
+<p>Single-document MongoDB updates are atomic. Multi-collection actions,
+such as updating an issue and adding event/audit records, are currently
+performed as separate writes. Production deployment should use a MongoDB
+replica set and transactions where all-or-nothing consistency is
+required.</p>
+<h2 id="normalization-and-denormalization">8.5 Normalization and
+denormalization</h2>
+<p>The design is selectively normalized:</p>
+<ul>
+<li>Hall and location records are referenced to avoid inconsistent
+names.</li>
+<li>Current issue state is stored on the issue for fast dashboards.</li>
+<li>Historical changes are stored separately in issue events.</li>
+<li>Some user and hall data is populated for responses rather than
+copied permanently.</li>
+</ul>
+<p>This is deliberate current-state/event-history separation, not
+accidental duplication.</p>
+<h2 id="growth-to-100-times-the-data">8.6 Growth to 100 times the
+data</h2>
+<p>The first likely pressure points are:</p>
+<ol type="1">
+<li>Analytics functions that load candidate records into application
+memory for overdue and average-time calculations.</li>
+<li>Global aggregation queries across all issues.</li>
+<li>In-memory notifications and rate limiting.</li>
+<li>Unbounded list endpoints if pagination is absent or
+insufficient.</li>
+</ol>
+<p>Improvements would include:</p>
+<ul>
+<li>Move overdue computation into MongoDB aggregation or persist
+<code>targetResponseAt</code> with an index.</li>
+<li>Add pagination and bounded filters everywhere.</li>
+<li>Use pre-aggregated daily metrics for expensive dashboards.</li>
+<li>Archive old closed issues according to retention policy.</li>
+<li>Use Redis-backed queues, caching, and rate limiting.</li>
+<li>Examine query plans with <code>explain()</code> and production
+metrics before adding indexes.</li>
+</ul>
+<h1 id="api-and-module-design">9. API and Module Design</h1>
+<h2 id="api-base-and-documentation">9.1 API base and documentation</h2>
+<p>The API is mounted at <code>/api/v1</code>. Swagger UI is served at
+<code>/api/v1/docs</code>. Local configuration currently uses backend
+port <code>5001</code>, though the configured <code>PORT</code> remains
+authoritative.</p>
+<h2 id="important-endpoint-groups">9.2 Important endpoint groups</h2>
+<h3 id="authentication">Authentication</h3>
+<ul>
+<li><code>POST /auth/login</code></li>
+<li><code>POST /auth/logout</code></li>
+<li><code>POST /auth/refresh</code></li>
+<li><code>GET /auth/me</code></li>
+<li>Password reset endpoints</li>
+</ul>
+<h3 id="issues-1">Issues</h3>
+<ul>
+<li>Create and list visible reports.</li>
+<li>Retrieve one permitted report and its event history.</li>
+<li>Add comments.</li>
+<li>Acknowledge, reject, or request clarification.</li>
+<li>Change operational priority.</li>
+<li>Optionally assign personnel.</li>
+<li>Change status according to policy.</li>
+<li>Reopen a resolved issue.</li>
+</ul>
+<h3 id="residence-directory">Residence directory</h3>
+<ul>
+<li>List halls.</li>
+<li>List controlled hall locations.</li>
+<li>Obtain hall metrics.</li>
+<li>Update controlled metadata with administrative permission.</li>
+</ul>
+<h3 id="administration">Administration</h3>
+<ul>
+<li>Analytics overview.</li>
+<li>Audit log access.</li>
+<li>User listing and audited role changes.</li>
+</ul>
+<h2 id="request-validation">9.3 Request validation</h2>
+<p>Zod schemas reject invalid or unknown request fields. JSON and
+URL-encoded payloads are limited to 10 KB. File binaries are not sent
+through the API; image uploads go directly to Cloudinary.</p>
+<h2 id="error-format">9.4 Error format</h2>
+<p>Errors use a stable structure with code, message, and request ID. The
+request ID links a client-visible failure to structured server logs.</p>
+<h2 id="current-contract-limitation">9.5 Current contract
+limitation</h2>
+<p>The status request schema accepts an optional <code>message</code>,
+but <code>updateIssueStatus</code> currently does not persist that
+message in the event or audit record. Therefore, resolution-note
+functionality must not be presented as complete. The correct fix is to
+pass the message from controller to service, store it on the event and
+audit metadata, and add integration tests.</p>
+<h1 id="frontend-design">10. Frontend Design</h1>
+<h2 id="shared-role-based-route">10.1 Shared role-based route</h2>
+<p>Every authenticated user lands on <code>/dashboard</code>. The URL
+does not encode role. The authenticated user returned by
+<code>/auth/me</code> determines:</p>
+<ul>
+<li>Dashboard component.</li>
+<li>Navigation items.</li>
+<li>Available actions.</li>
+<li>Queries presented to the user.</li>
+</ul>
+<p>The backend remains authoritative. Hiding a button is a usability
+measure, not a security boundary.</p>
+<h2 id="role-views">10.2 Role views</h2>
+<h3 id="student">Student</h3>
+<ul>
+<li>Own open/resolved metrics.</li>
+<li>Report issue action.</li>
+<li>Own issue list and details.</li>
+<li>Reopen action on a resolved issue.</li>
+</ul>
+<h3 id="hall-manager">Hall manager</h3>
+<ul>
+<li>Assigned-hall queue.</li>
+<li>Pending, acknowledged, and resolved metrics.</li>
+<li>Acknowledge, reject, clarify, prioritize, resolve, and close actions
+permitted by policy.</li>
+</ul>
+<h3 id="maintenance">Maintenance</h3>
+<ul>
+<li>Assigned-hall work orders.</li>
+<li>Acknowledged, reopened, and other resolvable reports.</li>
+<li>Direct resolution action without individual assignment.</li>
+</ul>
+<h3 id="administrator">Administrator</h3>
+<ul>
+<li>Cross-hall analytics.</li>
+<li>Audit logs.</li>
+<li>User and settings sections according to role.</li>
+</ul>
+<h2 id="session-guard">10.3 Session guard</h2>
+<p>The dashboard layout waits for the current-session request. If no
+user is authenticated, it replaces the route with <code>/login</code>.
+This prevents the previous endless loading state for logged-out
+users.</p>
+<h2 id="state-management">10.4 State management</h2>
+<ul>
+<li>TanStack Query manages API/server state and invalidation.</li>
+<li>React Hook Form manages form state.</li>
+<li>Zod validates client input.</li>
+<li>Local React or Zustand state handles interface concerns.</li>
+</ul>
+<h1 id="algorithms-and-complexity">11. Algorithms and Complexity</h1>
+<p>HostelFix is primarily an information system rather than an
+algorithm-research project. Its core algorithms are state transition,
+unique reference allocation, access filtering, overdue detection,
+auto-close scanning, and aggregation.</p>
+<h2 id="state-transition-validation">11.1 State-transition
+validation</h2>
+<p>The policy stores a small list of valid
+<code>(from, to, predicate)</code> rules and searches for a matching
+transition.</p>
+<p>If <code>T</code> is the number of transition rules, time complexity
+is <code>O(T)</code> and space is <code>O(T)</code>. In this domain
+<code>T</code> is a small constant, so the operation is effectively
+constant time. A map keyed by <code>from:to</code> could provide
+expected <code>O(1)</code> lookup, but it would not materially affect
+this workflow.</p>
+<h2 id="unique-reference-allocation">11.2 Unique reference
+allocation</h2>
+<p>Reference generation performs one indexed atomic upsert/update on
+<code>(hallCode, date)</code> and increments a sequence. With a B-tree
+index, lookup is approximately <code>O(log C)</code>, where
+<code>C</code> is the number of counter documents; formatting is
+<code>O(1)</code> for fixed-size fields.</p>
+<p>The atomic increment is preferable to counting existing issues
+because counting is slower and creates race conditions under concurrent
+submissions.</p>
+<h2 id="role-scoped-issue-retrieval">11.3 Role-scoped issue
+retrieval</h2>
+<p>A student query filters by <code>reporterId</code>; hall staff filter
+by hall membership; administrators use an unrestricted query. With
+indexes, lookup is approximately <code>O(log N + K)</code>, where
+<code>N</code> is total issues and <code>K</code> is returned issues.
+Without pagination, transferring and serializing <code>K</code> can
+still dominate.</p>
+<h2 id="overdue-calculation">11.4 Overdue calculation</h2>
+<p>The current analytics implementation fetches unresolved candidate
+issues and filters them in application memory. If <code>U</code> is the
+number of unresolved candidates, time is <code>O(U)</code> and
+additional space is <code>O(U)</code> for loaded documents. This is a
+known scaling bottleneck.</p>
+<p>A better high-scale design would store indexed
+<code>targetResponseAt</code> or use an aggregation expression and query
+overdue records directly, reducing application memory and network
+transfer.</p>
+<h2 id="auto-close-job">11.5 Auto-close job</h2>
+<p>The hourly job queries resolved issues whose dispute deadline is at
+or before now, then processes each result. For <code>E</code> expired
+issues, processing is <code>O(E)</code> service calls after indexed
+candidate retrieval. Batch updates would be faster but would complicate
+per-issue events, audits, and notifications. The implementation
+prioritizes accountability over maximum batch throughput.</p>
+<h2 id="analytics">11.6 Analytics</h2>
+<p>MongoDB aggregation groups issues by status, priority, hall, and
+category. A grouping operation is generally <code>O(N)</code> over
+matched records, subject to index-assisted filtering and database
+execution details. At high volume, pre-aggregation and time-bounded
+queries would be considered.</p>
+<h2 id="performance-evidence">11.7 Performance evidence</h2>
+<p>No formal profiling, benchmark, or load-test report is currently
+present. Performance claims should therefore be framed as complexity
+analysis and index-aware design, not measured production throughput. The
+first optimization effort should be driven by measurements of query
+latency, event-loop utilization, database explain plans, and memory
+consumption.</p>
+<h1 id="security-and-governance">12. Security and Governance</h1>
+<h2 id="authentication-1">12.1 Authentication</h2>
+<p>Login accepts University ID or email plus PIN/password. Password
+material is hashed with bcrypt. On successful authentication:</p>
+<ul>
+<li>A short-lived JWT access token is signed.</li>
+<li>A 64-byte random opaque refresh token is generated.</li>
+<li>Only a SHA-256 hash of the refresh token is stored.</li>
+<li>Both tokens are sent in HTTP-only cookies.</li>
+</ul>
+<p>The browser does not store tokens in <code>localStorage</code> or
+<code>sessionStorage</code>, reducing exposure to JavaScript-based token
+theft.</p>
+<h2 id="authorization">12.2 Authorization</h2>
+<p>The system combines:</p>
+<ol type="1">
+<li>Authentication: who is the caller?</li>
+<li>Role authorization: what category of action can that role
+perform?</li>
+<li>Object-level authorization: does the caller own this issue or belong
+to the issue’s hall?</li>
+</ol>
+<p>The backend reloads the user on authenticated requests, so disabled
+accounts and updated role/hall assignments can take effect rather than
+relying only on stale JWT claims.</p>
+<h2 id="token-theft-response">12.3 Token theft response</h2>
+<ul>
+<li>Access tokens expire after a short duration.</li>
+<li>Refresh tokens are revocable database records.</li>
+<li>Refresh rotation deletes the old token before creating a new
+one.</li>
+<li>Logout deletes the presented refresh-token record.</li>
+<li>Password reset revokes all refresh tokens for that user.</li>
+<li>Production cookies should use <code>Secure</code> and an appropriate
+<code>SameSite</code> setting over HTTPS.</li>
+</ul>
+<p>A remaining concern is that a stolen active access token remains
+usable until expiry unless a centralized revocation/version check is
+added. The short lifetime limits that window.</p>
+<h2 id="threat-model-leading-attack-vectors">12.4 Threat model: leading
+attack vectors</h2>
+<h3 id="broken-access-control">Broken access control</h3>
+<p><strong>Threat:</strong> A student requests another student’s issue,
+or a hall manager accesses another hall.</p>
+<p><strong>Controls:</strong> Ownership/hall policies, role guards,
+backend query scoping, and negative permission tests.</p>
+<h3 id="credential-attacks">Credential attacks</h3>
+<p><strong>Threat:</strong> PIN brute force, credential stuffing, token
+theft, or account enumeration.</p>
+<p><strong>Controls:</strong> bcrypt hashing, login rate limiting,
+generic invalid-credential and password-reset responses, HTTP-only
+cookies, refresh rotation, and account active checks.</p>
+<p>A five-digit PIN has limited entropy. Production should combine it
+with institutional identity assurance, lockout/monitoring, stronger
+secrets where possible, and potentially multi-factor authentication for
+privileged roles.</p>
+<h3 id="injection-and-malicious-input">Injection and malicious
+input</h3>
+<p><strong>Threat:</strong> Unexpected fields, oversized payloads,
+malformed IDs, or script content.</p>
+<p><strong>Controls:</strong> Strict Zod schemas, payload limits,
+Mongoose query construction, output encoding by React, Helmet headers,
+and centralized errors. A dedicated content-security-policy review and
+security test should still be completed.</p>
+<h3 id="malicious-or-privacy-invasive-images">Malicious or
+privacy-invasive images</h3>
+<p><strong>Threat:</strong> Invalid URLs, oversized uploads, sensitive
+room images, or retained personal information.</p>
+<p><strong>Controls:</strong> Signed direct upload, Cloudinary URL
+validation, external binary storage, and authorization over issue
+records. File-type/size policy, private delivery configuration,
+retention, moderation, and deletion workflows remain production
+requirements.</p>
+<h2 id="owasp-alignment">12.5 OWASP alignment</h2>
+<p>Examples include:</p>
+<ul>
+<li><strong>A01 Broken Access Control:</strong> object-level policies
+and permission-denial tests.</li>
+<li><strong>A02 Cryptographic Failures:</strong> bcrypt password
+hashing, token hashing, and HTTPS/Secure-cookie production
+requirements.</li>
+<li><strong>A03 Injection:</strong> strict Zod schemas and controlled
+query construction.</li>
+<li><strong>A05 Security Misconfiguration:</strong> environment
+validation, Helmet, restricted CORS, and production cookie
+settings.</li>
+<li><strong>A07 Identification and Authentication Failures:</strong>
+rate limits, generic errors, short-lived access tokens, refresh
+rotation, and revocation.</li>
+<li><strong>A09 Security Logging and Monitoring Failures:</strong>
+request IDs, Pino logs, issue events, and audit logs.</li>
+</ul>
+<p>The project follows relevant OWASP principles but has not undergone a
+formal OWASP verification or penetration test.</p>
+<h2 id="data-at-rest-and-in-transit">12.6 Data at rest and in
+transit</h2>
+<p>In transit, production must use HTTPS. At rest, password and token
+material is hashed, but application records are not field-level
+encrypted by the code. Production should use encrypted MongoDB
+storage/Atlas encryption, encrypted backups, restricted database network
+access, and managed secrets.</p>
+<h2 id="database-credential-leakage">12.7 Database credential
+leakage</h2>
+<p>If a database credential leaks, the blast radius depends on its
+privileges and network reachability. Controls should include:</p>
+<ul>
+<li>A least-privilege application database user limited to the HostelFix
+database.</li>
+<li>Network allowlisting/private networking.</li>
+<li>Separate development, test, staging, and production
+credentials.</li>
+<li>Secret-manager storage rather than committed files.</li>
+<li>Credential rotation and audit monitoring.</li>
+<li>Encrypted backups and tested recovery.</li>
+</ul>
+<p>No secret should be included in this report or version control.</p>
+<h2 id="governance">12.8 Governance</h2>
+<p>Before institutional launch, policy owners must approve:</p>
+<ul>
+<li>Data retention durations.</li>
+<li>Image access and deletion.</li>
+<li>Role provisioning and periodic review.</li>
+<li>Emergency escalation contacts.</li>
+<li>Audit-log access.</li>
+<li>Student dispute handling.</li>
+<li>Contractor identification.</li>
+<li>Incident-response and breach-notification procedures.</li>
+</ul>
+<h1 id="software-engineering-process">13. Software Engineering
+Process</h1>
+<h2 id="development-approach">13.1 Development approach</h2>
+<p>The implementation reflects iterative and risk-driven development
+rather than a documented formal Scrum process. The workflow was revised
+after critical operational review, then backend policies, tests,
+frontend views, migration, and documentation were updated together.</p>
+<p>It is defensible to describe the process as iterative Agile-inspired
+development using short feedback cycles, but not to claim formal
+sprints, ceremonies, velocity, or product-owner sign-off unless separate
+evidence exists.</p>
+<h2 id="code-organization">13.2 Code organization</h2>
+<p>The backend is organized by domain modules, while shared middleware
+and policies remain explicit. The frontend separates app routes,
+dashboard components, hooks, API utilities, providers, forms, types, and
+constants. This supports maintainability because a new developer can
+trace an issue action from route to validation, controller, service,
+policy, model, and test.</p>
+<h2 id="version-control">13.3 Version control</h2>
+<p>The provided project root is not currently recognized as a Git
+repository. Therefore, this document cannot honestly claim a branching
+strategy, commit history, pull-request review, or CI pipeline based on
+repository evidence. Before final submission, the project should be
+placed under Git version control with:</p>
+<ul>
+<li>A protected main branch.</li>
+<li>Short-lived feature branches.</li>
+<li>Reviewed pull requests.</li>
+<li>Concise commits tied to requirements or defects.</li>
+<li>Automated test, typecheck, lint, and build checks.</li>
+</ul>
+<p>If a separate Git repository exists elsewhere, its history should be
+included as defense evidence.</p>
+<h2 id="static-analysis-and-quality-gates">13.4 Static analysis and
+quality gates</h2>
+<p>The project uses:</p>
+<ul>
+<li>TypeScript compilation/typecheck.</li>
+<li>ESLint.</li>
+<li>Next.js production build.</li>
+<li>Vitest unit/integration/permission tests.</li>
+<li>OpenAPI YAML parsing and runtime Swagger UI.</li>
+</ul>
+<p>A future CI workflow should run these checks on each pull
+request.</p>
+<h1 id="testing-and-evaluation">14. Testing and Evaluation</h1>
+<h2 id="testing-strategy">14.1 Testing strategy</h2>
+<h3 id="unit-testing">Unit testing</h3>
+<p>Tests isolated policy decisions and reference-number behavior.</p>
+<h3 id="integration-testing">Integration testing</h3>
+<p>Tests exercised Express endpoints with Supertest and MongoDB Memory
+Server, including authentication, halls, issue lifecycle, and automatic
+closure.</p>
+<h3 id="permission-testing">Permission testing</h3>
+<p>Negative tests verify that:</p>
+<ul>
+<li>One student cannot read another student’s issue.</li>
+<li>A manager cannot access another hall’s data.</li>
+<li>Maintenance cannot self-assign arbitrary work.</li>
+<li>Non-system administrators cannot escalate roles.</li>
+</ul>
+<h3 id="frontend-testing">Frontend testing</h3>
+<p>The current frontend unit suite validates status behavior. The
+project also passes TypeScript checking and production build. Broader
+component and end-to-end tests remain limited.</p>
+<h2 id="current-verified-results">14.2 Current verified results</h2>
+<p>At the last recorded verification:</p>
+<ul>
+<li>Backend: 10 test files, 30 tests passing.</li>
+<li>Backend typecheck, lint, and build passed in the completed workflow
+implementation.</li>
+<li>Frontend unit tests: 2 passing.</li>
+<li>Frontend typecheck passed.</li>
+<li>Frontend production build passed.</li>
+<li>Frontend lint passed with two non-blocking raw-image warnings.</li>
+<li>Seeded logins for all five roles were tested against the API and
+returned the expected roles.</li>
+</ul>
+<h2 id="example-failure-and-correction">14.3 Example failure and
+correction</h2>
+<p>The test infrastructure originally used an older email/password
+assumption even though authentication had changed to ID/PIN. This caused
+drift between tests and the actual API. Test helpers were updated to use
+the real authentication contract. Test parallelism against shared
+in-memory state and low rate-limit values also caused avoidable
+failures; the suite configuration and helpers were corrected.</p>
+<p>Another integration defect was stale persisted issue status
+<code>verified</code> after the new enum removed it. A migration mapped
+legacy <code>verified</code> records to <code>acknowledged</code>.</p>
+<h2 id="correctness-versus-it-runs">14.4 Correctness versus “it
+runs”</h2>
+<p>Correctness is evaluated through:</p>
+<ul>
+<li>State-transition tests.</li>
+<li>Role/ownership/hall permission tests.</li>
+<li>Auto-close behavior.</li>
+<li>Authentication role responses.</li>
+<li>Type checking and schema validation.</li>
+<li>Production frontend compilation.</li>
+</ul>
+<p>However, operational effectiveness requires more than software
+correctness. A pilot should measure acknowledgement time, resolution
+time, reopening rate, report loss, user satisfaction, and staff
+adoption.</p>
+<h2 id="missing-evaluation">14.5 Missing evaluation</h2>
+<p>The following are not currently evidenced:</p>
+<ul>
+<li>Formal load testing.</li>
+<li>Measured test coverage percentage.</li>
+<li>Penetration testing.</li>
+<li>Accessibility audit.</li>
+<li>Cross-browser matrix.</li>
+<li>Independent user-acceptance testing.</li>
+<li>Quantified before/after operational outcomes.</li>
+</ul>
+<p>These should be presented as future evaluation, not invented
+results.</p>
+<h1 id="deployment-and-operations">15. Deployment and Operations</h1>
+<h2 id="local-runtime">15.1 Local runtime</h2>
+<ul>
+<li>Frontend: <code>http://localhost:3000</code></li>
+<li>Backend: configured locally as
+<code>http://localhost:5001</code></li>
+<li>MongoDB: <code>mongodb://127.0.0.1:27017/hostelfix</code></li>
+</ul>
+<p>The backend must have MongoDB running before startup. The development
+database can be seeded with the provided scripts. Seeded accounts use
+PIN <code>12345</code> only for local demonstration and must never be
+used in production.</p>
+<h2 id="production-topology">15.2 Production topology</h2>
+<p>A reasonable production design is:</p>
+<ul>
+<li>Next.js deployed behind HTTPS/CDN.</li>
+<li>Express API in containers or managed compute behind a load
+balancer.</li>
+<li>MongoDB replica set or managed MongoDB service.</li>
+<li>Redis/BullMQ or managed queue for durable jobs.</li>
+<li>Cloudinary configured with signed uploads and an approved retention
+policy.</li>
+<li>Managed secret storage.</li>
+<li>Centralized logs, metrics, alerts, and error tracking.</li>
+<li>Automated backup and restore testing.</li>
+</ul>
+<h2 id="scaling-to-ten-times-the-load">15.3 Scaling to ten times the
+load</h2>
+<ol type="1">
+<li>Horizontally scale stateless frontend and API processes.</li>
+<li>Move queues and rate limits from memory to Redis-backed
+infrastructure.</li>
+<li>Verify MongoDB indexes and query plans.</li>
+<li>Add pagination and cache suitable read-heavy reference data.</li>
+<li>Pre-aggregate expensive analytics.</li>
+<li>Separate notification workers if workload justifies it.</li>
+</ol>
+<p>The system should remain a modular monolith until measured
+constraints justify service extraction.</p>
+<h1 id="limitations-and-future-work">16. Limitations and Future
+Work</h1>
+<h2 id="biggest-current-limitation">16.1 Biggest current limitation</h2>
+<p>The largest product-level limitation is the absence of documented
+real-user validation and pilot evidence. The architecture can be
+technically correct while still failing adoption. The project’s central
+claim is reduced operational friction, so that claim should eventually
+be measured with actual users.</p>
+<h2 id="important-technical-limitations">16.2 Important technical
+limitations</h2>
+<ol type="1">
+<li>Status <code>message</code> is currently not persisted by the status
+service.</li>
+<li>Duplicate reports cannot be formally linked.</li>
+<li>External resolver identity is not a structured field.</li>
+<li>Completion photos are not separately supported.</li>
+<li>Emergency-contact UI is absent.</li>
+<li>In-memory jobs and rate limits do not support reliable
+multi-instance operation.</li>
+<li>Some analytics load records into application memory.</li>
+<li>Multi-collection writes are not consistently transactional.</li>
+<li>Frontend end-to-end and accessibility coverage is limited.</li>
+<li>No load, penetration, or user-acceptance report exists.</li>
+<li>The current seed contains ten halls while original project scope
+states nine.</li>
+<li>The server currently begins listening before database connection
+completes; startup ordering should be improved so database failure
+causes a clear fail-fast exit rather than an unhandled rejection while a
+port may already be open.</li>
+</ol>
+<h2 id="prioritized-roadmap">16.3 Prioritized roadmap</h2>
+<h3 id="immediate-correctness">Immediate correctness</h3>
+<ul>
+<li>Persist resolution/status messages and test them.</li>
+<li>Correct hall-scope documentation/code discrepancy.</li>
+<li>Make backend startup connect to MongoDB before listening.</li>
+<li>Add pagination to list endpoints.</li>
+</ul>
+<h3 id="operational-completeness">Operational completeness</h3>
+<ul>
+<li>Add duplicate linking and subscriber notifications.</li>
+<li>Add structured resolver and completion evidence.</li>
+<li>Add approved emergency contacts.</li>
+<li>Add role-provisioning and retention workflows.</li>
+</ul>
+<h3 id="production-readiness">Production readiness</h3>
+<ul>
+<li>Persistent queue and shared rate limiter.</li>
+<li>Replica set and transaction review.</li>
+<li>Secrets manager, backups, monitoring, and alerts.</li>
+<li>CI/CD and Git-based review process.</li>
+<li>Load, security, accessibility, and disaster-recovery testing.</li>
+</ul>
+<h3 id="research-and-evaluation">Research and evaluation</h3>
+<ul>
+<li>Stakeholder interviews and baseline survey.</li>
+<li>Pilot deployment in one hall.</li>
+<li>Measure acknowledgement, resolution, reopening, and adoption.</li>
+<li>Refine the interface based on observed usage.</li>
+</ul>
+<h1 id="critical-reflection-and-intellectual-contribution">17. Critical
+Reflection and Intellectual Contribution</h1>
+<h2 id="what-would-be-done-differently">17.1 What would be done
+differently</h2>
+<p>If starting again, stakeholder validation would happen before
+finalizing workflow and schema. A prototype of the reporting and
+acknowledgement experience would be tested with students, hall staff,
+and maintenance workers. This likely would have produced the simplified
+workflow earlier and reduced migration effort.</p>
+<p>The implementation would also begin with Git and CI from the first
+commit, explicit pagination, a replica-set development environment for
+transactions, and a clear distinction between initial report evidence
+and completion evidence.</p>
+<h2 id="most-defensible-design-decision">17.2 Most defensible design
+decision</h2>
+<p>The strongest decision is making acknowledgement and assignment
+non-blocking. It recognizes that institutional work is socio-technical:
+software should improve visibility without demanding that all behavior
+conform to the application.</p>
+<h2 id="least-certain-design-decision">17.3 Least certain design
+decision</h2>
+<p>MongoDB is defensible but not inevitable. The domain has meaningful
+relationships, audit requirements, and reporting needs that a relational
+database could model strongly. MongoDB remains reasonable because
+current-state issue documents and evolving evidence fit document
+storage, while indexes and controlled references support the present
+queries. The decision should be revisited if reporting joins, strict
+relational integrity, or transactional complexity dominate.</p>
+<h2 id="intellectual-contribution">17.4 Intellectual contribution</h2>
+<p>The contribution is not the invention of login, REST, MongoDB, or
+dashboards. It is the combination of:</p>
+<ul>
+<li>A workflow derived from adoption constraints.</li>
+<li>Separation of physical work from digital accountability.</li>
+<li>Current-state plus immutable-history modeling.</li>
+<li>Role plus object-level authorization.</li>
+<li>A dispute window that replaces manual closure bottlenecks.</li>
+<li>A shared route whose content and data scope adapt to authenticated
+role.</li>
+</ul>
+<p>This demonstrates computing mastery through requirements analysis,
+state modeling, secure API design, concurrency-aware reference
+generation, database indexing, modular architecture, asynchronous
+processing, testing, and critical trade-off analysis.</p>
+<h1 id="oral-defense-question-bank-and-model-answers">18. Oral-Defense
+Question Bank and Model Answers</h1>
+<h2 id="problem-definition-and-motivation-1">18.1 Problem Definition and
+Motivation</h2>
+<h3
+id="q-what-specific-problem-does-this-solve-and-what-evidence-shows-it-is-real">Q:
+What specific problem does this solve, and what evidence shows it is
+real?</h3>
+<p><strong>Answer:</strong> HostelFix addresses fragmented maintenance
+reporting and weak follow-up across verbal reports, messaging, logbooks,
+and informal handoffs. It creates one scoped record of what is broken,
+whether hall staff know, whether it was fixed, and whether the student
+disputes the result. The design is grounded in operational workflow
+analysis, particularly the recognition that repairs often begin outside
+an application. I must be precise that the current repository does not
+contain formal survey or interview data; a hall pilot and stakeholder
+study are required to quantify the problem and evaluate adoption.</p>
+<h3 id="q-who-are-the-users-and-how-was-the-problem-validated">Q: Who
+are the users and how was the problem validated?</h3>
+<p><strong>Answer:</strong> The direct users are student residents, hall
+managers/caretakers, university maintenance personnel, university
+administrators, and system administrators. Requirements were validated
+through role and use-case analysis and iterative critique of the
+proposed workflow. Formal validation artifacts such as interview
+transcripts and survey results are not currently present, so I would not
+claim them. My next evaluation step would be interviews and a pilot in
+one hall.</p>
+<h3
+id="q-what-existing-solutions-were-reviewed-and-what-do-they-fail-to-do">Q:
+What existing solutions were reviewed, and what do they fail to do?</h3>
+<p><strong>Answer:</strong> The practical alternatives are verbal
+reporting, WhatsApp/telephone, logbooks, spreadsheets, and generic
+ticketing systems. Informal methods are fast but weak in traceability
+and analytics. Generic ticketing tools are traceable but can impose
+assignment-heavy workflows that do not match hall maintenance. HostelFix
+keeps the informal channel available while adding hall scope, resident
+ownership, audit events, a dispute window, and cross-hall metrics.</p>
+<h3 id="q-why-is-this-a-computer-science-or-it-problem">Q: Why is this a
+computer science or IT problem?</h3>
+<p><strong>Answer:</strong> Software cannot repair a pipe, but it can
+solve identity, authorization, state consistency, concurrent references,
+notification, audit, and analytics problems across multiple roles. Those
+require secure session management, data modeling, state-machine policy,
+asynchronous jobs, indexing, and tested APIs.</p>
+<h3 id="q-state-the-novelty-in-one-sentence.">Q: State the novelty in
+one sentence.</h3>
+<p><strong>Answer:</strong> HostelFix is a hall-scoped maintenance
+record that preserves accountability without making digital assignment
+and progress updates prerequisites for physical work.</p>
+<h2 id="requirements-engineering-1">18.2 Requirements Engineering</h2>
+<h3 id="q-how-were-requirements-derived">Q: How were requirements
+derived?</h3>
+<p><strong>Answer:</strong> Through stakeholder-role analysis, use
+cases, workflow modeling, permission-matrix analysis, and iterative
+critique. A major example is replacing the original six-stage lifecycle
+after identifying that it would create an adoption bottleneck. Formal
+stakeholder research is a remaining methodological task.</p>
+<h3 id="q-what-was-deliberately-scoped-out">Q: What was deliberately
+scoped out?</h3>
+<p><strong>Answer:</strong> Public registration, inventory and
+procurement, payment, GPS tracking, AI diagnosis, emergency dispatch,
+contractor management, and microservices. These were excluded to keep
+the first release focused on reporting, awareness, resolution, dispute,
+and accountability.</p>
+<h3 id="q-how-do-requirements-trace-to-deliverables">Q: How do
+requirements trace to deliverables?</h3>
+<p><strong>Answer:</strong> Each sensitive requirement maps to frontend
+routes, API endpoints, policy functions, data fields, and tests. Student
+isolation, for example, maps to <code>/dashboard/issues</code>,
+reporter-scoped queries, <code>canViewIssue</code>, and a negative
+permission test.</p>
+<h3 id="q-how-would-you-handle-stakeholdertechnical-conflict">Q: How
+would you handle stakeholder/technical conflict?</h3>
+<p><strong>Answer:</strong> Identify the underlying need and separate it
+from the proposed mechanism. Mandatory assignment was requested for
+accountability, but it conflicted with low-friction operations. I
+retained assignment as optional metadata and preserved actor audit
+events while removing it as a transition gate.</p>
+<h2 id="system-design-and-architecture">18.3 System Design and
+Architecture</h2>
+<h3 id="q-walk-through-the-architecture.">Q: Walk through the
+architecture.</h3>
+<p><strong>Answer:</strong> A Next.js client calls an Express REST API
+using credentialed HTTPS requests. Express owns authentication,
+authorization, validation, workflow, analytics, uploads, audit, and
+jobs. MongoDB stores operational data; Cloudinary stores image binaries;
+an email adapter handles notification delivery. The backend is a modular
+monolith organized by domain.</p>
+<h3 id="q-why-a-modular-monolith-rather-than-microservices">Q: Why a
+modular monolith rather than microservices?</h3>
+<p><strong>Answer:</strong> The current scale and team do not justify
+distributed-system overhead. A modular monolith is easier to deploy,
+debug, test, and keep consistent. Module boundaries preserve the option
+to extract notifications or analytics later when measured load or team
+ownership justifies it.</p>
+<h3 id="q-what-are-the-single-points-of-failure">Q: What are the single
+points of failure?</h3>
+<p><strong>Answer:</strong> One API process, one local MongoDB process,
+an in-memory queue, and external image/email providers. Production
+mitigation includes multiple API instances, a replica set, persistent
+queue, shared rate limiter, monitoring, backups, and provider failure
+handling.</p>
+<h3 id="q-how-do-components-communicate-and-why-rest">Q: How do
+components communicate and why REST?</h3>
+<p><strong>Answer:</strong> The browser and frontend communicate with
+the API through JSON REST endpoints. REST is widely supported, easy to
+document with OpenAPI, and sufficient for resource-oriented operations.
+Jobs are decoupled through an internal queue. gRPC would add complexity
+without a demonstrated latency or strongly typed service-to-service
+requirement.</p>
+<h3 id="q-what-patterns-were-used">Q: What patterns were used?</h3>
+<p><strong>Answer:</strong> Layered modular architecture, service layer,
+policy/strategy-style authorization functions, repository-like Mongoose
+models, adapter-based external services, current-state plus
+event-history modeling, and asynchronous job processing. Each exists for
+a concrete reason: policy functions centralize access decisions,
+services centralize workflows, and event history preserves
+accountability without slowing dashboard queries.</p>
+<h2 id="data-design-1">18.4 Data Design</h2>
+<h3 id="q-explain-the-schema.">Q: Explain the schema.</h3>
+<p><strong>Answer:</strong> Users reference assigned halls; halls
+contain controlled locations; issues reference reporter, hall, and
+location; issue events reference issues and actors; assignment is
+optional many-to-many metadata; notification and audit records preserve
+delivery and administrative history. Current state is stored on issues
+and historical transitions in issue events.</p>
+<h3 id="q-what-keys-and-indexes-matter">Q: What keys and indexes
+matter?</h3>
+<p><strong>Answer:</strong> MongoDB ObjectIds are primary identifiers.
+Unique keys exist for user email/student/staff ID and issue reference
+number. Compound issue indexes support hall queues, student history,
+assignment views, category analytics, and overdue filtering. The counter
+has a unique hall/date index for concurrent reference allocation.</p>
+<h3 id="q-how-are-integrity-and-concurrency-handled">Q: How are
+integrity and concurrency handled?</h3>
+<p><strong>Answer:</strong> Strict validation, controlled services,
+unique indexes, atomic single-document updates, and an atomic
+<code>$inc</code> counter handle common integrity and concurrency needs.
+Cross-collection writes are separate today; production should use
+replica-set transactions where all writes must succeed or fail
+together.</p>
+<h3 id="q-what-breaks-at-100-times-the-data">Q: What breaks at 100 times
+the data?</h3>
+<p><strong>Answer:</strong> In-memory overdue and average-time
+calculations, global aggregations, unbounded result sets, and in-memory
+jobs/rate limiting. I would add pagination, database-side deadlines,
+pre-aggregated metrics, archive policies, durable queues, shared rate
+limiting, and query-plan measurement.</p>
+<h3 id="q-why-nosql">Q: Why NoSQL?</h3>
+<p><strong>Answer:</strong> Issue current state is naturally
+document-shaped, the evidence schema may evolve, and MongoDB aggregation
+supports dashboards. Controlled references preserve relationships. A
+relational database is a valid alternative and may be stronger if
+complex joins and strict relational constraints become dominant.</p>
+<h2 id="algorithms-and-complexity-1">18.5 Algorithms and Complexity</h2>
+<h3 id="q-what-are-the-core-algorithms">Q: What are the core
+algorithms?</h3>
+<p><strong>Answer:</strong> State-transition lookup, atomic reference
+generation, role-scoped query construction, overdue filtering,
+auto-close selection, and analytics aggregation. Transition lookup is
+<code>O(T)</code> over a small constant rule set. Indexed retrieval is
+approximately <code>O(log N + K)</code>. Current overdue calculation is
+<code>O(U)</code> time and space over unresolved candidates, which is
+the clearest optimization target.</p>
+<h3 id="q-why-atomic-counter-generation">Q: Why atomic counter
+generation?</h3>
+<p><strong>Answer:</strong> Counting existing issues and adding one
+creates a race under concurrent submissions. An indexed atomic
+<code>$inc</code> provides a unique sequence without a client-side
+race.</p>
+<h3 id="q-where-is-the-performance-bottleneck-and-how-do-you-know">Q:
+Where is the performance bottleneck and how do you know?</h3>
+<p><strong>Answer:</strong> Code analysis identifies analytics functions
+that load candidate documents into application memory. I do not yet have
+profiling or benchmark evidence, so I describe it as a likely bottleneck
+rather than a measured one. Production optimization should begin with
+telemetry and database explain plans.</p>
+<h3 id="q-what-would-you-optimize-first">Q: What would you optimize
+first?</h3>
+<p><strong>Answer:</strong> Persist/index <code>targetResponseAt</code>,
+paginate issue lists, move overdue calculations into MongoDB, and
+replace in-memory jobs/rate limits. Those changes reduce memory and
+support horizontal scaling.</p>
+<h2 id="security-and-governance-1">18.6 Security and Governance</h2>
+<h3 id="q-how-do-authentication-and-authorization-work">Q: How do
+authentication and authorization work?</h3>
+<p><strong>Answer:</strong> ID/email and PIN/password are checked
+against a bcrypt hash. The API issues an HTTP-only JWT access cookie and
+opaque refresh cookie. Each protected request verifies the token,
+reloads the active user, then applies role plus object-level ownership
+or assigned-hall policy.</p>
+<h3 id="q-what-if-a-token-is-stolen">Q: What if a token is stolen?</h3>
+<p><strong>Answer:</strong> HTTP-only storage reduces script access,
+access tokens are short-lived, refresh tokens are hashed and rotated,
+logout revokes the current refresh token, and password reset revokes all
+refresh tokens. A stolen access token can remain valid until expiry, so
+HTTPS, Secure cookies, short TTL, monitoring, and potentially token
+versioning are important.</p>
+<h3 id="q-what-are-the-top-three-attacks">Q: What are the top three
+attacks?</h3>
+<p><strong>Answer:</strong> Broken object-level authorization,
+credential/token attacks, and malicious input or uploads. They are
+addressed through scoped policies and negative tests; bcrypt, rate
+limits, cookie controls, rotation, and generic errors; and strict
+schemas, payload limits, Helmet, Cloudinary signing, and URL
+validation.</p>
+<h3 id="q-how-is-data-protected">Q: How is data protected?</h3>
+<p><strong>Answer:</strong> Passwords and stored tokens are hashed.
+Production traffic must use HTTPS and Secure cookies. Database storage
+and backups should use provider encryption and least-privilege
+credentials. The application does not currently implement field-level
+encryption for issue content.</p>
+<h3 id="q-which-standard-was-followed">Q: Which standard was
+followed?</h3>
+<p><strong>Answer:</strong> The controls align with OWASP Top 10
+categories, especially broken access control, authentication failures,
+injection, security misconfiguration, and security logging. No formal
+certification or penetration test has been completed.</p>
+<h3 id="q-what-if-database-credentials-leak">Q: What if database
+credentials leak?</h3>
+<p><strong>Answer:</strong> The impact should be constrained through a
+database-specific least-privilege user, private networking, environment
+separation, secret management, monitoring, and rapid rotation. If an
+unrestricted credential is used, the blast radius could include all
+application records, so credential scope is a production governance
+requirement.</p>
+<h2 id="software-engineering-process-1">18.7 Software Engineering
+Process</h2>
+<h3 id="q-what-methodology-was-followed">Q: What methodology was
+followed?</h3>
+<p><strong>Answer:</strong> Iterative, risk-driven development with
+Agile-inspired feedback cycles. The workflow was revised after
+operational critique, and code, tests, migration, UI, and documentation
+were updated together. I would not claim formal Scrum ceremonies because
+that evidence is not present.</p>
+<h3 id="q-how-was-version-control-managed">Q: How was version control
+managed?</h3>
+<p><strong>Answer:</strong> The current project root is not recognized
+as a Git repository, so I cannot substantiate a branching or commit
+strategy from this copy. Before submission or team continuation, I would
+initialize or restore Git history, use protected main, feature branches,
+pull-request review, and CI quality gates.</p>
+<h3 id="q-what-testing-was-performed">Q: What testing was
+performed?</h3>
+<p><strong>Answer:</strong> Backend unit, integration, and
+permission-denial tests; frontend unit tests; TypeScript checks; lint;
+production builds; API login smoke tests; and browser route checks.
+Formal load, penetration, accessibility, and user-acceptance testing
+remain outstanding.</p>
+<h3 id="q-was-there-code-review-or-cicd">Q: Was there code review or
+CI/CD?</h3>
+<p><strong>Answer:</strong> Static analysis and automated local quality
+gates exist, but the repository evidence does not show a CI pipeline or
+formal peer-review record. A pull-request pipeline should run tests,
+typecheck, lint, build, dependency scanning, and OpenAPI validation.</p>
+<h3 id="q-how-is-maintainability-supported">Q: How is maintainability
+supported?</h3>
+<p><strong>Answer:</strong> Domain modules own routes, validation,
+controllers, services, and models; reusable policies centralize
+authorization; the frontend separates routes, components, hooks,
+providers, and types; and OpenAPI documents the external contract.</p>
+<h2 id="aiml-questions">18.8 AI/ML Questions</h2>
+<h3 id="q-what-ai-model-did-the-system-use">Q: What AI model did the
+system use?</h3>
+<p><strong>Answer:</strong> None. HostelFix is a transactional
+information system. Adding AI simply to appear advanced would introduce
+unsupported predictions and new privacy risks. A future classifier could
+suggest category or priority, but hall management would still need
+control, and it would require representative labeled data, bias
+analysis, and measured benefit.</p>
+<h3 id="q-how-would-you-evaluate-a-future-model">Q: How would you
+evaluate a future model?</h3>
+<p><strong>Answer:</strong> Use a time- and hall-aware
+train/validation/test split to prevent leakage, evaluate per-class
+precision, recall, F1, and calibration, inspect errors by hall/category,
+and retain human override. No such model or dataset exists in the
+current system.</p>
+<h2 id="testing-and-evaluation-1">18.9 Testing and Evaluation</h2>
+<h3 id="q-how-do-you-know-the-system-meets-requirements">Q: How do you
+know the system meets requirements?</h3>
+<p><strong>Answer:</strong> Requirements map to routes, policies,
+models, UI, and automated tests. Sensitive isolation is tested
+negatively, not just through successful paths. Builds and typechecks
+establish structural correctness. Operational effectiveness still
+requires user and pilot metrics.</p>
+<h3 id="q-give-an-initially-failing-case-and-fix.">Q: Give an initially
+failing case and fix.</h3>
+<p><strong>Answer:</strong> Tests used an old email/password
+authentication contract while the API used ID/PIN. Helpers were updated
+to authenticate through the real contract. A second case involved legacy
+<code>verified</code> database records after status simplification; a
+migration mapped them to <code>acknowledged</code>.</p>
+<h3 id="q-was-load-testing-performed">Q: Was load testing
+performed?</h3>
+<p><strong>Answer:</strong> No formal load test is documented. I can
+explain complexity and indexes, but I should not invent throughput
+results. A suitable next test would use k6 or Artillery against login,
+issue creation, hall queues, and analytics with realistic
+concurrency.</p>
+<h3 id="q-who-tested-it-besides-the-developer">Q: Who tested it besides
+the developer?</h3>
+<p><strong>Answer:</strong> No independent UAT evidence is stored in the
+repository. That is a limitation. A supervised pilot with students, hall
+managers, and maintenance workers should produce signed scenarios,
+observations, and change requests.</p>
+<h2 id="critical-reflection">18.10 Critical Reflection</h2>
+<h3 id="q-what-is-the-single-biggest-limitation">Q: What is the single
+biggest limitation?</h3>
+<p><strong>Answer:</strong> Lack of formal real-user validation. The
+system’s defining claim is reduced workflow friction, so adoption and
+operational impact must be measured in a pilot rather than inferred only
+from code.</p>
+<h3 id="q-what-would-you-do-differently">Q: What would you do
+differently?</h3>
+<p><strong>Answer:</strong> Validate workflows with users before
+implementation, establish Git and CI immediately, model completion
+evidence separately, build pagination from the start, and use a
+replica-set development environment for transaction testing.</p>
+<h3 id="q-what-did-you-learn-technically">Q: What did you learn
+technically?</h3>
+<p><strong>Answer:</strong> The most important lesson is that
+technically detailed workflows can still be poor systems. Good
+architecture includes socio-technical fit. I also learned to combine
+role and object-level authorization, model current state separately from
+immutable history, handle concurrent counters atomically, and treat
+background delivery as independent from core persistence.</p>
+<h3 id="q-defend-a-decision-you-are-least-confident-about.">Q: Defend a
+decision you are least confident about.</h3>
+<p><strong>Answer:</strong> MongoDB is the least exclusive decision
+because PostgreSQL would also fit. I defend it through document-shaped
+issue state, evolving evidence, Mongoose validation, and existing
+aggregation/index support. I also acknowledge its weaker built-in
+relational constraints and would revisit the choice if reporting joins
+and transactional relationships become dominant.</p>
+<h3 id="q-what-did-you-add-rather-than-assemble">Q: What did you add
+rather than assemble?</h3>
+<p><strong>Answer:</strong> The intellectual work lies in the workflow
+and policy design: eliminating assignment gates while preserving
+accountability, adding a dispute window and auto-close, defining
+hall-scoped object authorization, and separating present state from
+immutable events. Frameworks supplied tools; the domain model and
+trade-offs determine system behavior.</p>
+<h3 id="q-how-does-this-demonstrate-csit-mastery">Q: How does this
+demonstrate CS/IT mastery?</h3>
+<p><strong>Answer:</strong> It integrates requirements engineering,
+state-machine design, secure authentication, object-level authorization,
+database modeling and indexing, concurrency control, REST API design,
+asynchronous jobs, frontend state management, testing, observability,
+and critical analysis of scalability and governance.</p>
+<h1 id="demonstration-script">19. Demonstration Script</h1>
+<p>A concise defense demonstration should use separate browser sessions
+or log out between roles.</p>
+<h2 id="preparation">19.1 Preparation</h2>
+<ol type="1">
+<li>Start MongoDB.</li>
+<li>Start the backend on the configured port.</li>
+<li>Seed development users.</li>
+<li>Start the frontend.</li>
+<li>Confirm <code>/health</code> and <code>/api/v1/docs</code>.</li>
+</ol>
+<p>Development accounts all use PIN <code>12345</code>:</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>11287773</code></td>
+<td>Student</td>
+</tr>
+<tr>
+<td><code>10000001</code></td>
+<td>Hall manager</td>
+</tr>
+<tr>
+<td><code>10000002</code></td>
+<td>Maintenance</td>
+</tr>
+<tr>
+<td><code>10000003</code></td>
+<td>University administrator</td>
+</tr>
+<tr>
+<td><code>10000004</code></td>
+<td>System administrator</td>
+</tr>
+</tbody>
+</table>
+<p>These credentials are demonstration-only.</p>
+<h2 id="main-scenario">19.2 Main scenario</h2>
+<ol type="1">
+<li>Log in as the student and show <code>/dashboard</code>.</li>
+<li>Create a plumbing issue with hall, room, priority, description, and
+optional image.</li>
+<li>Show the generated reference and <code>submitted</code> state.</li>
+<li>Log in as hall manager and show role-specific content at the same
+<code>/dashboard</code> URL.</li>
+<li>Acknowledge the issue and show its event history.</li>
+<li>Log in as maintenance and show the assigned-hall work-order
+view.</li>
+<li>Mark the issue resolved without individual assignment or
+<code>in_progress</code>.</li>
+<li>Log in as the student and show the dispute/reopen option.</li>
+<li>Explain that an hourly job auto-closes after the configured
+window.</li>
+<li>Log in as administrator and show analytics and audit logs.</li>
+</ol>
+<h2 id="security-scenario">19.3 Security scenario</h2>
+<ul>
+<li>Attempt to access another student’s issue and explain the expected
+<code>403</code>.</li>
+<li>Explain hall-manager isolation.</li>
+<li>Show HTTP-only cookies rather than local-storage tokens.</li>
+<li>Show OpenAPI and request-ID error structure.</li>
+</ul>
+<h2 id="reflection-during-demonstration">19.4 Reflection during
+demonstration</h2>
+<p>Explicitly state that maintenance work may happen before
+acknowledgement. The digital state records the outcome; it does not
+prevent a caretaker or technician from acting.</p>
+<h1 id="conclusion">20. Conclusion</h1>
+<p>HostelFix demonstrates that maintenance software should be designed
+around actual institutional behavior. The system provides role-scoped
+reporting, controlled status transitions, auditability, notifications,
+analytics, and a dispute mechanism while avoiding the central failure of
+over-digitization: making application updates a prerequisite for
+physical work.</p>
+<p>The implemented modular architecture, object-level authorization,
+indexed MongoDB model, atomic reference generation, and automated tests
+provide a strong technical foundation. At the same time, the project is
+honest about its unfinished work. Production deployment requires formal
+stakeholder validation, persistent infrastructure, stronger operational
+governance, completion evidence, duplicate handling, performance
+testing, security assessment, and resolution of the approved-hall
+discrepancy.</p>
+<p>The project’s main contribution is therefore both technical and
+analytical: it shows how a system can increase accountability without
+becoming the bottleneck it was intended to remove.</p>
+<h1 id="references-and-evidence-map">21. References and Evidence
+Map</h1>
+<h2 id="internal-project-evidence">21.1 Internal project evidence</h2>
+<ul>
+<li><code>README.md</code> — project overview and operating model.</li>
+<li><code>backend/README.md</code> — backend setup and implementation
+summary.</li>
+<li><code>frontend/README.md</code> — frontend setup and shared
+dashboard architecture.</li>
+<li><code>hostelfix-backend-docs/workflows.md</code> — operational
+lifecycle.</li>
+<li><code>hostelfix-backend-docs/data-model.md</code> — collection
+design and indexes.</li>
+<li><code>hostelfix-backend-docs/api-contract.md</code> — API
+contract.</li>
+<li><code>hostelfix-backend-docs/technical-decisions.md</code> —
+architecture rationale.</li>
+<li><code>hostelfix-backend-docs/adr-001-simplified-workflow.md</code> —
+accepted workflow decision.</li>
+<li><code>backend/docs/openapi.yaml</code> — canonical machine-readable
+API description.</li>
+<li><code>backend/src/policies/issue.policy.ts</code> — state and
+authorization policy.</li>
+<li><code>backend/src/modules/issues/issue.service.ts</code> — issue
+workflow implementation.</li>
+<li><code>backend/src/modules/auth/auth.service.ts</code> —
+authentication and token lifecycle.</li>
+<li><code>backend/src/jobs/auto-close-resolved-issues.job.ts</code> —
+automatic closure.</li>
+<li><code>backend/tests/</code> — unit, integration, and permission
+evidence.</li>
+</ul>
+<h2
+id="external-frameworks-to-cite-in-a-formal-academic-bibliography">21.2
+External frameworks to cite in a formal academic bibliography</h2>
+<p>The final institution-formatted document should add properly
+formatted references for:</p>
+<ul>
+<li>OWASP Top 10 and OWASP Application Security Verification
+Standard.</li>
+<li>MongoDB and Mongoose documentation.</li>
+<li>Express documentation.</li>
+<li>Next.js documentation.</li>
+<li>JSON Web Token standards and security guidance.</li>
+<li>ISO/IEC 25010 software quality model, if used for evaluation.</li>
+<li>Relevant maintenance-management and information-systems
+literature.</li>
+<li>University of Ghana residence and data-governance policies, where
+officially available.</li>
+</ul>
+<p>Do not claim that a standard was formally certified or that an
+empirical study was conducted unless evidence is attached.</p>
+<hr />
+<h2 id="appendix-a-short-defense-opening">Appendix A: Short Defense
+Opening</h2>
+<blockquote>
+<p>HostelFix is a role-based maintenance reporting and tracking platform
+for University of Ghana halls. Its goal is not to digitize every
+physical handoff. Its goal is to create a reliable record of what is
+broken, whether the responsible hall knows, whether it was fixed, and
+whether the resident disputes the result. I implemented it as a Next.js
+client, an Express and TypeScript modular API, and MongoDB. The key
+design decision was simplifying the workflow to Submitted, Acknowledged,
+Resolved, and Closed, with rejection and reopening. Assignment remains
+optional, so maintenance work can continue through the practical
+channels already used in the halls. The system adds object-level
+authorization, audit events, analytics, notifications, and automatic
+closure after a dispute window without turning the software into an
+operational bottleneck.</p>
+</blockquote>
+<h2 id="appendix-b-one-minute-architecture-answer">Appendix B:
+One-Minute Architecture Answer</h2>
+<blockquote>
+<p>The browser renders a Next.js frontend and calls an Express REST API
+using HTTP-only authentication cookies. Express owns all domain and
+permission rules. It is organized as a modular monolith with
+authentication, users, residences, issues, assignments, notifications,
+analytics, audit logs, and upload modules. MongoDB stores current issue
+state and related records, while issue events preserve history.
+Cloudinary stores images. Scheduled jobs escalate overdue issues and
+auto-close resolved issues after the dispute window. I chose a modular
+monolith because the current scale does not justify microservice
+complexity, but module boundaries leave room to extract notifications or
+analytics later.</p>
+</blockquote>
+<h2 id="appendix-c-one-minute-limitation-answer">Appendix C: One-Minute
+Limitation Answer</h2>
+<blockquote>
+<p>The biggest limitation is not a missing framework feature; it is the
+absence of formal user and pilot validation. The system is designed to
+reduce workflow friction, but that must be measured with students, hall
+staff, and maintenance workers. Technically, the most immediate defects
+are that status messages are accepted but not persisted, duplicate
+reports are not linked, completion evidence is not modeled, the queue is
+in-memory, and the current seed contains ten halls while the original
+scope states nine. I would correct those before production and then run
+load, security, accessibility, and user-acceptance testing.</p>
+</blockquote>
+</body>
+</html>
