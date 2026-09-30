@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  rewrites: async () => [
+    {
+      source: "/api/:path*",
+      destination: `${process.env.API_BASE_URL}/:path*`,
+    },
+  ],
   redirects: async () => [
     // Student legacy routes
     { source: "/student", destination: "/dashboard", permanent: true },

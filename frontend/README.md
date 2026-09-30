@@ -23,7 +23,7 @@ pnpm install
 pnpm dev
 ```
 
-Set `NEXT_PUBLIC_API_BASE_URL` to the backend base URL. The current local environment uses `http://localhost:5001/api/v1`.
+Set `API_BASE_URL` to the backend base URL. The current local environment uses `http://localhost:5001/api/v1`. It is server-only — browser requests hit same-origin `/api/*` and Next.js rewrites proxy them to the backend.
 
 ## Scripts
 
