@@ -25,6 +25,8 @@ const __dirname = path.dirname(__filename);
 export function createApp(): Express {
   const app = express();
 
+  app.set('trust proxy', 1);
+
   app.use(helmet());
   app.use(
     cors({

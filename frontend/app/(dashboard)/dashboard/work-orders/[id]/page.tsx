@@ -91,11 +91,7 @@ export default function DashboardWorkOrderDetailPage() {
                     Start Work
                   </Button>
                 )}
-                {(issue.status === "submitted" ||
-                  issue.status === "under_review" ||
-                  issue.status === "assigned" ||
-                  issue.status === "in_progress" ||
-                  issue.status === "reopened") && (
+                {issue.status === "in_progress" && (
                   <Button onClick={handleResolve} disabled={updateStatus.isPending}>
                     Mark Resolved
                   </Button>

@@ -85,12 +85,12 @@ describe('issue policies', () => {
     const underReview = makeIssue('under_review', { hallId });
     expect(canTransitionStatus(manager, underReview, 'assigned')).toBe(true);
     expect(canTransitionStatus(maint, underReview, 'in_progress')).toBe(true);
-    expect(canTransitionStatus(maint, underReview, 'resolved')).toBe(true);
-    expect(canTransitionStatus(manager, underReview, 'resolved')).toBe(true);
+    expect(canTransitionStatus(maint, underReview, 'resolved')).toBe(false);
+    expect(canTransitionStatus(manager, underReview, 'resolved')).toBe(false);
 
     const assigned = makeIssue('assigned', { hallId });
     expect(canTransitionStatus(maint, assigned, 'in_progress')).toBe(true);
-    expect(canTransitionStatus(maint, assigned, 'resolved')).toBe(true);
+    expect(canTransitionStatus(maint, assigned, 'resolved')).toBe(false);
 
     const inProgress = makeIssue('in_progress', { hallId });
     expect(canTransitionStatus(maint, inProgress, 'resolved')).toBe(true);
@@ -99,8 +99,11 @@ describe('issue policies', () => {
   it('rejects invalid status transitions', () => {
     const hallId = new mongoose.Types.ObjectId();
     const manager = makeUser('hall_manager', [hallId]);
+    const maint = makeUser('maintenance', [hallId]);
     const submitted = makeIssue('submitted', { hallId });
     expect(canTransitionStatus(manager, submitted, 'closed')).toBe(false);
+    expect(canTransitionStatus(manager, submitted, 'resolved')).toBe(false);
+    expect(canTransitionStatus(maint, submitted, 'resolved')).toBe(false);
   });
 
   it('student cannot close issue', () => {

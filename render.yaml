@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: hostelfix-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    region: frankfurt
+    buildCommand: pnpm install --frozen-lockfile && pnpm build
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: ACCESS_TOKEN_SECRET
+        sync: false
+      - key: REFRESH_TOKEN_SECRET
+        sync: false
+      - key: ACCESS_TOKEN_EXPIRY
+        value: 15m
+      - key: REFRESH_TOKEN_EXPIRY
+        value: 7d
+      - key: BCRYPT_ROUNDS
+        value: 12
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: None
+      - key: CORS_ORIGIN
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_FOLDER
+        value: hostelfix
+      - key: EMAIL_PROVIDER
+        value: stub
+      - key: EMAIL_FROM
+        value: noreply@hostelfix.ug.edu.gh
+      - key: LOG_LEVEL
+        value: info
+      - key: SYSTEM_ADMIN_EMAIL
+        value: admin@hostelfix.ug.edu.gh
+      - key: SYSTEM_ADMIN_PASSWORD
+        sync: false

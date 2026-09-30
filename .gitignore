@@ -31,6 +31,8 @@ next-env.d.ts
 .vercel
 .gstack/
 
-# local tooling config
+# test credentials / local tooling config
+logs.txt
+backend/scripts/out/
 .devin/config.local.json
 frontend/.git.bak/

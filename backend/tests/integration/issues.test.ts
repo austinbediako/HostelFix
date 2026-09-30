@@ -85,9 +85,13 @@ describe('Issue lifecycle', () => {
     expect(priorityRes.status).toBe(200);
     expect(priorityRes.body.data.priority).toBe('high');
 
-    // Maintenance can resolve without explicit assignment
+    // Maintenance can resolve without explicit assignment, but only once in progress
     const maintAgent = getAgent();
     await loginAs(maintAgent, maint);
+    const progressRes = await maintAgent.patch(`/api/v1/issues/${issueId}/status`).send({
+      status: 'in_progress',
+    });
+    expect(progressRes.status).toBe(200);
     const resolveRes = await maintAgent.patch(`/api/v1/issues/${issueId}/status`).send({
       status: 'resolved',
     });
@@ -102,7 +106,7 @@ describe('Issue lifecycle', () => {
     expect(closeRes.body.data.status).toBe('closed');
   });
 
-  it('allows hall manager to resolve an issue under review directly', async () => {
+  it('requires work to be in progress before an issue can be resolved', async () => {
     await seedHalls();
     const hall = await Hall.findOne({ code: 'CMH' });
     await createLocation(hall!._id);
@@ -128,6 +132,12 @@ describe('Issue lifecycle', () => {
     });
     expect(ackRes.status).toBe(200);
 
+    const earlyRes = await managerAgent.patch(`/api/v1/issues/${issueId}/status`).send({
+      status: 'resolved',
+    });
+    expect(earlyRes.status).toBe(400);
+
+    await managerAgent.patch(`/api/v1/issues/${issueId}/status`).send({ status: 'in_progress' });
     const resolveRes = await managerAgent.patch(`/api/v1/issues/${issueId}/status`).send({
       status: 'resolved',
     });
@@ -156,6 +166,7 @@ describe('Issue lifecycle', () => {
     const managerAgent = getAgent();
     await loginAs(managerAgent, manager);
     await managerAgent.patch(`/api/v1/issues/${issueId}/acknowledge`).send({ action: 'acknowledge' });
+    await managerAgent.patch(`/api/v1/issues/${issueId}/status`).send({ status: 'in_progress' });
     await managerAgent.patch(`/api/v1/issues/${issueId}/status`).send({ status: 'resolved' });
 
     const reopenRes = await studentAgent.post(`/api/v1/issues/${issueId}/reopen`);

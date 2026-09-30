@@ -21,6 +21,7 @@ import {
   useReopenIssue,
 } from "@/hooks/use-issues";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Illustration } from "@/components/shared/illustration";
 import { Button } from "@/components/ui/button";
 
 export default function DashboardIssueDetailPage() {
@@ -120,17 +121,27 @@ export default function DashboardIssueDetailPage() {
       )}
       {issue && (
         <div className="space-y-6">
-          <Card>
+          <Card className="relative overflow-hidden">
             <CardHeader>
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div>
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
                   <p className="text-xs text-muted-foreground">{issue.referenceNumber}</p>
                   <CardTitle className="text-lg">{issue.description}</CardTitle>
+                  <div className="mt-2 flex gap-2">
+                    <IssueStatusBadge status={issue.status} />
+                    <IssuePriorityBadge priority={issue.priority} />
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <IssueStatusBadge status={issue.status} />
-                  <IssuePriorityBadge priority={issue.priority} />
-                </div>
+                <Illustration
+                  name={
+                    ["resolved", "closed"].includes(issue.status)
+                      ? "resolved"
+                      : ["assigned", "in_progress"].includes(issue.status)
+                        ? "maintenance"
+                        : "issue-tracking"
+                  }
+                  className="hidden w-36 shrink-0 sm:block"
+                />
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -184,16 +195,11 @@ export default function DashboardIssueDetailPage() {
                       Start Work
                     </Button>
                   )}
-                {(isHallManager || isMaintenance) &&
-                  (issue.status === "submitted" ||
-                    issue.status === "under_review" ||
-                    issue.status === "assigned" ||
-                    issue.status === "in_progress" ||
-                    issue.status === "reopened") && (
-                    <Button onClick={handleResolve} disabled={updateStatus.isPending}>
-                      Mark Resolved
-                    </Button>
-                  )}
+                {(isHallManager || isMaintenance) && issue.status === "in_progress" && (
+                  <Button onClick={handleResolve} disabled={updateStatus.isPending}>
+                    Mark Resolved
+                  </Button>
+                )}
                 {isHallManager && issue.status === "resolved" && (
                   <Button onClick={handleClose} disabled={updateStatus.isPending}>
                     Close Now

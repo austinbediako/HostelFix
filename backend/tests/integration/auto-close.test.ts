@@ -27,6 +27,7 @@ describe('Auto-close resolved issues', () => {
     const managerAgent = getAgent();
     await loginAs(managerAgent, manager);
     await managerAgent.patch(`/api/v1/issues/${issueId}/acknowledge`).send({ action: 'acknowledge' });
+    await managerAgent.patch(`/api/v1/issues/${issueId}/status`).send({ status: 'in_progress' });
     await managerAgent.patch(`/api/v1/issues/${issueId}/status`).send({ status: 'resolved' });
 
     // Simulate expiry by moving the dispute window to the past
@@ -62,6 +63,7 @@ describe('Auto-close resolved issues', () => {
     const managerAgent = getAgent();
     await loginAs(managerAgent, manager);
     await managerAgent.patch(`/api/v1/issues/${issueId}/acknowledge`).send({ action: 'acknowledge' });
+    await managerAgent.patch(`/api/v1/issues/${issueId}/status`).send({ status: 'in_progress' });
     await managerAgent.patch(`/api/v1/issues/${issueId}/status`).send({ status: 'resolved' });
 
     await closeResolvedIssue(issueId);
