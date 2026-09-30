@@ -1,10 +1,17 @@
 import type { NextConfig } from "next";
 
+const apiBaseUrl = process.env.API_BASE_URL;
+if (!apiBaseUrl) {
+  throw new Error(
+    "API_BASE_URL is not set. Add it to .env locally (e.g. http://localhost:5001/api/v1) or in your Vercel project env vars (e.g. https://hostelfix-api-mqzh.onrender.com/api/v1).",
+  );
+}
+
 const nextConfig: NextConfig = {
   rewrites: async () => [
     {
       source: "/api/:path*",
-      destination: `${process.env.API_BASE_URL}/:path*`,
+      destination: `${apiBaseUrl}/:path*`,
     },
   ],
   redirects: async () => [
