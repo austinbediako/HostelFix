@@ -33,6 +33,10 @@ next-env.d.ts
 
 # test credentials / local tooling config
 logs.txt
+logs.pdf
 backend/scripts/out/
 .devin/config.local.json
 frontend/.git.bak/
+test-results/
+__pycache__/
+*.pyc
