@@ -45,31 +45,46 @@ export function MaintenanceDashboard() {
         )}
       </PageHeader>
       <div className="mb-8 grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Assigned / In Progress</CardTitle>
-            <CardDescription>Work assigned to your halls</CardDescription>
+        <Card className="relative overflow-hidden border-t-4 border-t-assigned">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <div className="space-y-1">
+              <CardTitle>Assigned / In Progress</CardTitle>
+              <CardDescription>Work assigned to your halls</CardDescription>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-warning-bg text-assigned">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 9.36l-7.19 7.19a2.12 2.12 0 0 1-3-3l7.19-7.19a6 6 0 0 1 9.36-7.94z"/></svg>
+            </div>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{isLoading ? "—" : assignedCount}</p>
+            <p className="text-3xl font-bold text-assigned">{isLoading ? "—" : assignedCount}</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Open</CardTitle>
-            <CardDescription>Issues needing attention</CardDescription>
+        <Card className="relative overflow-hidden border-t-4 border-t-danger">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <div className="space-y-1">
+              <CardTitle>Open</CardTitle>
+              <CardDescription>Issues needing attention</CardDescription>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-danger-bg text-danger">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+            </div>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{isLoading ? "—" : openCount}</p>
+            <p className="text-3xl font-bold text-danger">{isLoading ? "—" : openCount}</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Resolved Today</CardTitle>
-            <CardDescription>Issues resolved by you today</CardDescription>
+        <Card className="relative overflow-hidden border-t-4 border-t-success">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <div className="space-y-1">
+              <CardTitle>Resolved Today</CardTitle>
+              <CardDescription>Issues resolved by you today</CardDescription>
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-success-bg text-success">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{isLoading ? "—" : resolvedTodayCount}</p>
+            <p className="text-3xl font-bold text-success">{isLoading ? "—" : resolvedTodayCount}</p>
           </CardContent>
         </Card>
       </div>

@@ -62,7 +62,14 @@ export async function login(id: string, pin: string, res: Response) {
       { studentId: id },
       { staffId: id },
     ],
-  }).select('+passwordHash');
+  })
+    .select('+passwordHash')
+    .populate('assignedHallIds', 'name code')
+    .populate({
+      path: 'allocatedLocationId',
+      select: 'block floor room commonArea type hallId',
+      populate: { path: 'hallId', select: 'name code' },
+    });
   if (!user || !user.passwordHash) {
     throw new AppError(401, ErrorCodes.UNAUTHORIZED, 'Invalid credentials');
   }
@@ -76,8 +83,8 @@ export async function login(id: string, pin: string, res: Response) {
     sub: user._id.toString(),
     email: user.email,
     role: user.role,
-    assignedHallIds: user.assignedHallIds.map((id) => id.toString()),
-    allocatedLocationId: user.allocatedLocationId?.toString(),
+    assignedHallIds: user.assignedHallIds.map((id: any) => id._id ? id._id.toString() : id.toString()),
+    allocatedLocationId: (user.allocatedLocationId as any)?._id ? (user.allocatedLocationId as any)._id.toString() : user.allocatedLocationId?.toString(),
     name: user.name,
   });
 
@@ -106,7 +113,17 @@ export async function refresh(refreshToken: string | undefined, res: Response) {
     throw new AppError(401, ErrorCodes.UNAUTHORIZED, 'Refresh token required');
   }
   const tokenHash = hashToken(refreshToken);
-  const stored = await RefreshToken.findOne({ tokenHash }).populate('userId');
+  const stored = await RefreshToken.findOne({ tokenHash }).populate({
+    path: 'userId',
+    populate: [
+      { path: 'assignedHallIds', select: 'name code' },
+      { 
+        path: 'allocatedLocationId', 
+        select: 'block floor room commonArea type hallId',
+        populate: { path: 'hallId', select: 'name code' },
+      }
+    ]
+  });
   if (!stored || stored.expiresAt < new Date()) {
     clearAuthCookies(res);
     throw new AppError(401, ErrorCodes.UNAUTHORIZED, 'Invalid or expired refresh token');
@@ -134,8 +151,8 @@ export async function refresh(refreshToken: string | undefined, res: Response) {
     sub: user._id.toString(),
     email: user.email,
     role: user.role,
-    assignedHallIds: user.assignedHallIds.map((id) => id.toString()),
-    allocatedLocationId: user.allocatedLocationId?.toString(),
+    assignedHallIds: user.assignedHallIds.map((id: any) => id._id ? id._id.toString() : id.toString()),
+    allocatedLocationId: (user.allocatedLocationId as any)?._id ? (user.allocatedLocationId as any)._id.toString() : user.allocatedLocationId?.toString(),
     name: user.name,
   });
   const newRawRefreshToken = createRefreshToken();

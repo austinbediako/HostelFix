@@ -20,10 +20,11 @@ async function silentRefresh(): Promise<void> {
 }
 
 function shouldRetry(config: InternalAxiosRequestConfig): boolean {
-  // Don't retry auth endpoints – they handle 401 on their own
+  // Don't retry login (bad credentials) or refresh (would recurse) –
+  // /auth/me must retry so an expired access token can silently refresh
   const url = config.url ?? "";
   if (config.headers?.["X-No-Retry"]) return false;
-  if (/\/auth\/(refresh|login|logout|me)/.test(url)) return false;
+  if (/\/auth\/(refresh|login)/.test(url)) return false;
   return true;
 }
 

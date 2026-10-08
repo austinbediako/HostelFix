@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
-import { useMe } from "@/hooks/use-auth";
+import { createContext, useContext, useEffect, type ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { ME_QUERY_KEY, useMe } from "@/hooks/use-auth";
 import type { CurrentUser } from "@/types/auth";
 
 interface AuthContextValue {
@@ -13,7 +14,14 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { data: user, isLoading } = useMe();
+  const queryClient = useQueryClient();
+  const { data: user, isLoading, isError } = useMe();
+
+  useEffect(() => {
+    if (isError) {
+      queryClient.setQueryData(ME_QUERY_KEY, undefined);
+    }
+  }, [isError, queryClient]);
 
   return (
     <AuthContext.Provider

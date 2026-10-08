@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import type { LoginInput, CurrentUser } from "@/types/auth";
 
-const ME_QUERY_KEY = ["me"];
+export const ME_QUERY_KEY = ["me"];
 
 export function useMe() {
   return useQuery({

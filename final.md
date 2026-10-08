@@ -4,12 +4,12 @@
 
 **Technical Project and Oral-Defense Document**
 
-**Candidate:** [Insert candidate name]  
-**Student ID:** [Insert student ID]  
-**Programme:** [Insert programme]  
-**Department:** [Insert department]  
-**Supervisor:** [Insert supervisor name]  
-**Institution:** University of Ghana  
+**Candidate:** Asante Gideon Kwadwo  
+**Student ID:** 11287773  
+**Programme:** BSc. Computer Science  
+**Department:** Department of Computer Science  
+**Supervisor:** Prof. Winfred Yaokumah  
+**Institution:** University of Ghana, Legon  
 **Date:** September 2026
 
 ---
